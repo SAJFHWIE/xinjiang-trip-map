@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>兰州出发·新疆自驾环线</title>
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei",sans-serif;display:flex;height:100vh;overflow:hidden;background:#0a0a1a}
+#sidebar{width:360px;min-width:360px;height:100vh;overflow-y:auto;background:#0a0a1a;color:#ccc;border-right:1px solid #1e1e3a;z-index:1000;scrollbar-width:thin;scrollbar-color:#333 #0a0a1a}
+#sidebar::-webkit-scrollbar{width:5px}#sidebar::-webkit-scrollbar-track{background:#0a0a1a}#sidebar::-webkit-scrollbar-thumb{background:#333;border-radius:3px}
+.hdr{padding:16px;background:linear-gradient(135deg,#0a0a1a,#111a30);border-bottom:1px solid #1e1e3a;position:sticky;top:0;z-index:10}
+.hdr h1{font-size:15px;color:#fff;margin-bottom:2px}.hdr p{font-size:10px;color:#666}
+.sts{display:grid;grid-template-columns:1fr 1fr 1fr 1fr;gap:5px;margin-top:8px}
+.st{padding:5px;border-radius:5px;background:#111;text-align:center}.st .n{font-size:14px;font-weight:700;color:#fff}.st .l{font-size:8px;color:#666}
+.ctrl{padding:8px 14px;border-bottom:1px solid #151530;display:flex;gap:5px;flex-wrap:wrap;position:sticky;top:72px;background:#0a0a1a;z-index:9}
+.cb{padding:4px 10px;border-radius:12px;border:1px solid #333;background:transparent;color:#888;font-size:10px;cursor:pointer;transition:all .2s;white-space:nowrap}
+.cb.on{border-color:currentColor;font-weight:600}.cb:hover{opacity:.8}
+.c1{color:#14b8a6}.c1.on{background:#14b8a618}
+.c2{color:#ef4444}.c2.on{background:#ef444418}
+.c3{color:#f59e0b}.c3.on{background:#f59e0b18}
+.ca{color:#60a5fa}.ca.on{background:#60a5fa18}
+.ov{padding:5px 14px;background:#0d0d20;border-bottom:1px solid #151530;display:flex;align-items:center;justify-content:space-between;position:sticky;top:100px;z-index:9}
+.ov span{font-size:10px;color:#555}
+.ov button{padding:3px 10px;border-radius:10px;border:1px solid #333;background:transparent;color:#888;font-size:10px;cursor:pointer}
+.ov button:hover{color:#fff;border-color:#666}
+.sec{padding:6px 14px;border-bottom:1px solid #12122a}
+.sec h2{font-size:10px;font-weight:700;color:#666;margin-bottom:5px;display:flex;align-items:center;gap:4px;text-transform:uppercase;letter-spacing:.5px}
+.sec h2 .d{width:6px;height:6px;border-radius:50%;display:inline-block}
+.di{padding:5px 8px;margin-bottom:3px;border-radius:5px;background:#0e0e22;font-size:10px;line-height:1.4;cursor:pointer;transition:all .15s;border-left:2px solid transparent}
+.di:hover{background:#16163a;border-left-color:#60a5fa}
+.di.act{background:#1a1a40;border-left-color:#60a5fa;box-shadow:0 0 8px #60a5fa20}
+.di .dl{font-weight:700;color:#eee;font-size:9.5px;letter-spacing:.3px}
+.di .dr{color:#555;font-size:9.5px}.di .dh{color:#60a5fa;font-size:9.5px}.di .dw{color:#f59e0b;font-size:9.5px}.di .dd{color:#ef4444;font-size:9.5px}
+.lg{padding:10px 14px}
+.lg h3{font-size:10px;color:#666;margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+.li{display:flex;align-items:center;gap:5px;margin-bottom:3px;font-size:9px;color:#777}
+.li .ll{width:16px;height:2px;border-radius:1px;flex-shrink:0}.li .ld{width:6px;height:6px;border-radius:50%;flex-shrink:0}
+.warn{background:#1a0808;border:1px solid #5c1a1a;margin:8px;border-radius:6px;padding:8px 12px}
+.warn h4{font-size:10px;color:#fca5a5;margin-bottom:4px}.warn p{font-size:9px;color:#fca5a5;line-height:1.6}
+#map{flex:1;height:100vh}
+.mi{display:flex;align-items:center;justify-content:center;background:none;border:none}
+.cl{font-size:9px;color:#fff;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 5px rgba(0,0,0,.7);white-space:nowrap}
+.pp{font-size:11px;line-height:1.5;max-width:180px}.pp strong{color:#1a73e8;font-size:12px}
+.day-info{position:absolute;bottom:20px;left:380px;right:20px;background:rgba(10,10,26,.92);border:1px solid #2a2a4a;border-radius:10px;padding:12px 16px;z-index:999;display:none;backdrop-filter:blur(8px)}
+.day-info.show{display:flex;align-items:center;gap:16px}
+.day-info .dn{font-size:20px;font-weight:800;color:#60a5fa;min-width:50px}
+.day-info .dt{font-size:12px;color:#ddd;flex:1}
+.day-info .dt strong{color:#fff;font-size:13px}
+.day-info .dt .meta{color:#888;font-size:10px;margin-top:2px}
+.day-info .close{cursor:pointer;color:#666;font-size:16px;padding:4px 8px}
+.day-info .close:hover{color:#fff}
+@media(max-width:768px){#sidebar{width:100%;min-width:100%;height:45vh;border-right:none;border-bottom:1px solid #2a2a4a}body{flex-direction:column}#map{height:55vh}.day-info{left:10px;right:10px;bottom:10px}}
+</style>
+</head>
+<body>
+<div id="sidebar">
+  <div class="hdr">
+    <h1>兰州出发 · 新疆自驾环线</h1>
+    <p>点击左侧每日行程查看详细路线 · 切换备选方案</p>
+    <div class="sts">
+      <div class="st"><div class="n">~13k</div><div class="l">总里程km</div></div>
+      <div class="st"><div class="n">42</div><div class="l">总天数</div></div>
+      <div class="st"><div class="n">4.7k</div><div class="l">最高海拔m</div></div>
+      <div class="st"><div class="n">⚡</div><div class="l">Model Y</div></div>
+    </div>
+  </div>
+  <div class="ctrl">
+    <button class="cb c1 on" onclick="togAlt('alar',this)">🛡 阿拉尔安全返程</button>
+    <button class="cb c2" onclick="togAlt('desert',this)"> 沙漠公路</button>
+    <button class="cb c3" onclick="togAlt('g315',this)">⚠️ G315入南疆</button>
+    <button class="cb ca on" onclick="togAlt('confirmed',this)">✅ 确认路线</button>
+  </div>
+  <div class="ov"><span id="ovTxt">全程总览</span><button onclick="resetView()">↩ 重置视图</button></div>
+  <div id="days"></div>
+  <div class="warn"><h4>⚠️ 高原反应提醒</h4><p>Day 3翻越达坂山(3940m)为全程最高海拔，初次入高原者请提前服用红景天，携带血氧仪和氧气罐。</p></div>
+  <div class="lg">
+    <h3>图例</h3>
+    <div class="li"><div class="ll" style="background:#f59e0b"></div>青海入疆（Day 1-9）</div>
+    <div class="li"><div class="ll" style="background:#10b981"></div>进疆（Day 10-13）</div>
+    <div class="li"><div class="ll" style="background:#8b5cf6"></div>北疆阿勒泰（Day 14-19）</div>
+    <div class="li"><div class="ll" style="background:#06b6d4"></div>独库公路+伊犁（Day 20-24）</div>
+    <div class="li"><div class="ll" style="background:#f43f5e"></div>南疆环线（Day 25-33）</div>
+    <div class="li"><div class="ll" style="background:#22c55e"></div>返程·河西走廊（Day 34-42）</div>
+    <div class="li"><div class="ll" style="background:#14b8a6"></div>🛡 备选：阿拉尔安全返程</div>
+    <div class="li"><div class="ll" style="background:#ef4444"></div> 备选：沙漠公路</div>
+    <div class="li"><div class="ll" style="background:#f59e0b;opacity:.5"></div>⚠️ 备选：G315入南疆</div>
+    <div class="li"><div class="ld" style="background:#22c55e"></div> 特斯拉超充</div>
+    <div class="li"><div class="ld" style="background:#f59e0b"></div>️ 第三方/需确认</div>
+    <div class="li"><div class="ld" style="background:#a855f7"></div>🏛 楼兰博物馆</div>
+    <div class="li"><div class="ld" style="background:#eab308"></div>🍂 轮台胡杨林</div>
+  </div>
+</div>
+<div id="map"></div>
+<div class="day-info" id="dayInfo">
+  <div class="dn" id="diDay"></div>
+  <div class="dt" id="diText"></div>
+  <div class="close" onclick="resetView()">✕</div>
+</div>
+<script>
+const map=L.map('map',{zoomControl:false}).setView([39,90],4);
+L.control.zoom({position:'topright'}).addTo(map);
+L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OSM & CartoDB',maxZoom:19,subdomains:'abcd'}).addTo(map);
+
+function mi(e,s){return L.divIcon({html:`<span style="font-size:${s||14}px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">${e}</span>`,className:'mi',iconSize:[(s||14)+6,(s||14)+6],iconAnchor:[(s||14)/2+3,(s||14)/2+3]})}
+const iC=mi('',14),iCh=mi('',13),iSc=mi('',13),iCa=mi('',12),iRi=mi('⚠️',12),iSt=mi('⭐',14),iMu=mi('',14),iHu=mi('',14),iHm=mi('🏠',15);
+
+const days=[
+  {ph:'青海入疆',pc:'#f59e0b',d:'Day 1',t:'兰州',r:'出发准备',dist:'市内30km',hl:'甘肃省博 · 黄河铁桥',
+   co:[[36.058,103.823]],mk:[{p:[36.058,103.823],i:iHm,n:'兰州',d:'出发地 · 海拔1520m'}]},
+  {d:'Day 2',t:'兰州 → 西宁',r:'220km · 2.5h',dist:'220km',hl:'塔尔寺 · 东关清真大寺',w:'⛰ 海拔2260m',
+   co:[[36.058,103.823],[36.2,103.0],[36.4,102.3],[36.55,101.9],[36.617,101.778]],mk:[{p:[36.617,101.778],i:iC,n:'西宁',d:'塔尔寺 · 海拔2260m'}]},
+  {d:'Day 3',t:'西宁 → 门源',r:'160km · 3h',dist:'160km',hl:'达坂山(3940m) · 高原草甸',w:'️ 高反风险最高',
+   co:[[36.617,101.778],[36.8,101.6],[37.05,101.5],[37.2,101.55],[37.377,101.612]],mk:[{p:[37.377,101.612],i:iSc,n:'门源',d:'达坂山3940m · 海拔3000m'}]},
+  {d:'Day 4',t:'门源 → 祁连',r:'150km · 3h',dist:'150km',hl:'卓尔山 · 祁连山草原',
+   co:[[37.377,101.612],[37.55,101.2],[37.8,100.8],[38.0,100.5],[38.177,100.253]],mk:[{p:[38.177,100.253],i:iSt,n:'祁连',d:'卓尔山 · 东方小瑞士'}]},
+  {d:'Day 5',t:'祁连 → 德令哈',r:'430km · 5.5h',dist:'430km',hl:'穿越柴达木盆地 · 情人湖',
+   co:[[38.177,100.253],[38.0,99.5],[37.8,98.5],[37.5,97.8],[37.370,97.370]],mk:[{p:[37.370,97.370],i:iSc,n:'德令哈',d:'海子诗歌纪念馆'}]},
+  {d:'Day 6',t:'德令哈 → 大柴旦',r:'200km · 2.5h',dist:'200km',hl:'翡翠湖 · 床车露营',
+   co:[[37.370,97.370],[37.5,96.8],[37.65,96.2],[37.75,95.7],[37.856,95.349]],mk:[{p:[37.856,95.349],i:iCh,n:'大柴旦',d:'翡翠湖 ⚡充电'}]},
+  {d:'Day 7',t:'大柴旦 → 茫崖',r:'350km · 4h',dist:'350km',hl:'U型公路 · 水上雅丹 · 翡翠湖',dd:'⚠️ 无人区',
+   co:[[37.856,95.349],[37.9,94.5],[38.0,93.5],[38.1,92.5],[38.238,91.210]],mk:[{p:[38.238,91.210],i:iSc,n:'茫崖',d:'翡翠湖 · 艾肯泉 · 公共桩64台'}]},
+  {d:'Day 8',t:'茫崖 → 冷湖',r:'220km · 3h',dist:'220km',hl:'火星营地 · 石油小镇 · 星空',
+   co:[[38.238,91.210],[38.3,91.8],[38.35,92.5],[38.380,93.360]],mk:[{p:[38.380,93.360],i:iCa,n:'冷湖',d:'火星营地 · 星空绝美 · ⛺露营'}]},
+  {d:'Day 9',t:'冷湖 → 敦煌',r:'180km · 2.5h',dist:'180km',hl:'莫高窟 · 鸣沙山月牙泉',
+   co:[[38.380,93.360],[38.8,93.5],[39.3,93.8],[39.7,94.2],[40.142,94.662]],mk:[{p:[40.142,94.662],i:iSt,n:'敦煌',d:'莫高窟 · 鸣沙山 · 月牙泉'}]},
+  {ph:'进疆',pc:'#10b981',d:'Day 10',t:'敦煌 → 哈密',r:'420km · 4.5h',dist:'420km',hl:'进疆！星星峡安检',
+   co:[[40.142,94.662],[40.6,94.2],[41.2,93.8],[42.0,93.6],[42.829,93.515]],mk:[{p:[42.829,93.515],i:iCh,n:'哈密',d:'进疆第一站 超充'}]},
+  {d:'Day 11',t:'哈密 → 吐鲁番',r:'410km · 4h',dist:'410km',hl:'火焰山 · 葡萄沟',
+   co:[[42.829,93.515],[42.9,92.5],[42.95,91.5],[42.95,90.5],[42.951,89.189]],mk:[{p:[42.951,89.189],i:iCh,n:'吐鲁番',d:'火焰山 · 葡萄沟 ⚡超充'}]},
+  {d:'Day 12',t:'吐鲁番 → 乌鲁木齐',r:'180km · 2h',dist:'180km',hl:'交河故城 · 国际大巴扎',
+   co:[[42.951,89.189],[43.1,88.8],[43.4,88.2],[43.6,87.8],[43.825,87.616]],mk:[{p:[43.825,87.616],i:iCh,n:'乌鲁木齐',d:'国际大巴扎 ⚡超充(14+桩)'}]},
+  {ph:'北疆阿勒泰',pc:'#8b5cf6',d:'Day 14',t:'乌鲁木齐 → 阿勒泰',r:'670km · 7-8h',dist:'670km',hl:'赶路日 · 克拉玛依补电',
+   co:[[43.825,87.616],[44.2,87.5],[45.0,87.2],[46.0,87.5],[47.0,87.8],[47.826,88.135]],mk:[{p:[47.826,88.135],i:iCh,n:'阿勒泰',d:'9月秋色天花板 ⚡超充'}]},
+  {d:'Day 15',t:'阿勒泰 → 布尔津',r:'100km',dist:'100km',hl:'五彩滩日落 · 河堤夜市',
+   co:[[47.826,88.135],[47.78,87.5],[47.702,86.950]],mk:[{p:[47.702,86.950],i:iCh,n:'布尔津',d:'五彩滩 · 河堤夜市 ⚡第三方'}]},
+  {d:'Day 16',t:'布尔津 → 喀纳斯',r:'160km',dist:'160km',hl:'三湾 · 观鱼台 · 9月秋色',
+   co:[[47.702,86.950],[47.9,87.0],[48.05,87.0],[48.220,87.020]],mk:[{p:[48.220,87.020],i:iSt,n:'喀纳斯',d:'三湾 · 观鱼台 · 秋色绝美'}]},
+  {d:'Day 17',t:'喀纳斯 → 禾木',r:'60km',dist:'60km',hl:'晨雾 · 白桦林 · 图瓦村落',
+   co:[[48.220,87.020],[48.15,87.08],[48.090,87.150]],mk:[{p:[48.090,87.150],i:iCa,n:'禾木',d:'神的自留地 · 晨雾 · ⛺'}]},
+  {d:'Day 18',t:'禾木 → 布尔津',r:'250km',dist:'250km',hl:'禾木日出 · 返程',
+   co:[[48.090,87.150],[47.9,87.05],[47.702,86.950]],mk:[]},
+  {d:'Day 19',t:'布尔津 → 独山子',r:'450km',dist:'450km',hl:'经克拉玛依 · 休整',
+   co:[[47.702,86.950],[47.0,86.5],[46.0,85.8],[45.0,85.2],[44.326,84.893]],mk:[{p:[44.326,84.893],i:iSc,n:'独山子',d:'独库公路起点 · 大峡谷'}]},
+  {ph:'独库公路+伊犁',pc:'#06b6d4',d:'Day 20',t:'独山子 → 巴音布鲁克',r:'260km · 独库北段',dist:'260km',hl:'哈希勒根达坂(3390m) · 乔尔玛',
+   co:[[44.326,84.893],[44.0,84.5],[43.5,84.2],[43.0,84.0],[42.735,84.148]],mk:[{p:[42.735,84.148],i:iSt,n:'巴音布鲁克',d:'九曲十八弯 · 天鹅湖'}]},
+  {d:'Day 21',t:'巴音布鲁克 → 库车',r:'260km · 独库南段',dist:'260km',hl:'九曲十八弯 · 天山大峡谷',
+   co:[[42.735,84.148],[42.3,83.8],[41.9,83.3],[41.718,82.937]],mk:[{p:[41.718,82.937],i:iCh,n:'库车',d:'天山大峡谷 · 龟兹文化 ⚡超充'}]},
+  {d:'Day 22',t:'库车 → 赛里木湖',r:'480km',dist:'480km',hl:'经阿克苏方向 · 湖边露营',
+   co:[[41.718,82.937],[42.0,82.5],[42.5,82.2],[43.2,81.8],[43.8,81.5],[44.3,81.2],[44.590,81.171]],mk:[{p:[44.590,81.171],i:iSt,n:'赛里木湖',d:'大西洋最后一滴眼泪'}]},
+  {d:'Day 23',t:'赛里木湖 → 伊宁',r:'120km',dist:'120km',hl:'环湖 · 果子沟大桥 · 喀赞其',
+   co:[[44.590,81.171],[44.4,81.1],[44.2,81.15],[44.05,81.2],[43.908,81.320]],mk:[{p:[43.908,81.320],i:iSc,n:'伊宁',d:'喀赞其 · 伊犁河大桥'}]},
+  {d:'Day 24',t:'伊宁 → 阿克苏',r:'460km · G3012',dist:'460km',hl:'高速赶路 · 阿克苏超充',
+   co:[[43.908,81.320],[43.5,81.0],[42.8,80.8],[42.2,80.6],[41.6,80.4],[41.168,80.260]],mk:[{p:[41.168,80.260],i:iCh,n:'阿克苏',d:'苹果之城 ⚡超充'}]},
+  {ph:'南疆环线',pc:'#f43f5e',d:'Day 25-26',t:'阿克苏 → 喀什',r:'460km',dist:'460km',hl:'古城 · 巴扎 · 艾提尕尔清真寺',
+   co:[[41.168,80.260],[40.8,79.5],[40.3,78.5],[39.9,77.5],[39.6,76.5],[39.470,75.989]],mk:[{p:[39.470,75.989],i:iCh,n:'喀什',d:'古城 · 巴扎 ⚡超充'}]},
+  {d:'Day 27-28',t:'喀什 → 塔什库尔干',r:'290km',dist:'290km',hl:'慕士塔格峰 · 盘龙古道(4100m)',w:'⚠️ 高反',
+   co:[[39.470,75.989],[39.2,76.0],[38.8,75.8],[38.4,75.5],[38.0,75.3],[37.775,75.232]],mk:[{p:[37.775,75.232],i:iCh,n:'塔什库尔干',d:'帕米尔 · 盘龙古道 ⚡充电'}]},
+  {d:'Day 29-30',t:'塔什库尔干 → 和田',r:'500km',dist:'500km',hl:'经叶城 · 和田夜市',
+   co:[[37.775,75.232],[38.0,75.3],[38.4,75.5],[38.8,75.8],[39.2,76.0],[39.470,75.989],[39.2,76.5],[38.8,77.2],[38.3,78.0],[37.8,78.8],[37.4,79.4],[37.114,79.925]],mk:[{p:[37.114,79.925],i:iCh,n:'和田',d:'夜市 · 玉石 ⚡超充'}]},
+  {d:'Day 31',t:'和田 → 民丰',r:'310km · G315',dist:'310km',hl:'塔克拉玛干南缘',dd:'️ 充电稀缺',
+   co:[[37.114,79.925],[37.08,80.5],[37.06,81.5],[37.064,82.683]],mk:[{p:[37.064,82.683],i:iRi,n:'民丰',d:'沙漠公路南端 ️充电极稀缺'}]},
+  {d:'Day 32',t:'民丰 → 且末',r:'320km · G315',dist:'320km',hl:'沙漠南缘 · 玉石之乡',dd:'⚠️',
+   co:[[37.064,82.683],[37.2,83.2],[37.5,84.0],[37.8,85.0],[38.145,85.529]],mk:[{p:[38.145,85.529],i:iRi,n:'且末',d:'玉石之乡 ⚠️需确认充电'}]},
+  {d:'Day 33',t:'且末 → 若羌',r:'330km · G315',dist:'330km',hl:'🏛 楼兰博物馆（重点！）',dd:'⚠️ 充电极稀缺',
+   co:[[38.145,85.529],[38.3,86.0],[38.5,86.5],[38.8,87.5],[39.013,88.174]],mk:[{p:[39.013,88.174],i:iMu,n:'若羌',d:'🏛 楼兰博物馆 · 红枣之乡 ⚠️'}]},
+  {ph:'返程·胡杨林+河西走廊',pc:'#22c55e',d:'Day 34-35',t:'若羌 → 库尔勒',r:'430km',dist:'430km',hl:'经且末 · 南疆枢纽',
+   co:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,86.0],[38.145,85.529],[38.5,86.0],[39.2,86.2],[40.0,86.1],[41.0,86.1],[41.764,86.145]],mk:[{p:[41.764,86.145],i:iCh,n:'库尔勒',d:'香梨之城 ⚡超充'}]},
+  {d:'Day 36',t:'库尔勒 → 轮台胡杨林',r:'170km',dist:'170km',hl:'🍂 塔里木胡杨林（10月金黄）',
+   co:[[41.764,86.145],[41.9,85.5],[42.0,84.5],[42.05,83.8],[42.108,82.957]],mk:[{p:[42.108,82.957],i:iHu,n:'轮台胡杨林',d:'🍂 塔里木胡杨林公园 · 10月金黄'}]},
+  {d:'Day 37',t:'轮台 → 乌鲁木齐',r:'480km · G30',dist:'480km',hl:'高速赶路 · 补给休整',
+   co:[[42.108,82.957],[42.3,83.5],[42.5,84.0],[42.8,84.5],[43.2,85.5],[43.5,86.5],[43.825,87.616]],mk:[]},
+  {d:'Day 38',t:'乌鲁木齐 → 哈密',r:'530km',dist:'530km',hl:'G30/G7 · 吐鲁番补电',
+   co:[[43.825,87.616],[43.6,87.8],[43.4,88.2],[43.1,88.8],[42.951,89.189],[42.9,90.5],[42.9,91.5],[42.9,92.5],[42.829,93.515]],mk:[]},
+  {d:'Day 39',t:'哈密 → 敦煌',r:'420km',dist:'420km',hl:'回到敦煌',
+   co:[[42.829,93.515],[42.0,93.6],[41.2,93.8],[40.6,94.2],[40.142,94.662]],mk:[]},
+  {d:'Day 40',t:'敦煌 → 嘉峪关',r:'380km',dist:'380km',hl:'天下第一雄关',
+   co:[[40.142,94.662],[40.05,95.5],[40.0,96.5],[39.9,97.5],[39.773,98.289]],mk:[{p:[39.773,98.289],i:iSc,n:'嘉峪关',d:'天下第一雄关'}]},
+  {d:'Day 41',t:'嘉峪关 → 张掖',r:'230km',dist:'230km',hl:'七彩丹霞日落',
+   co:[[39.773,98.289],[39.6,98.6],[39.4,99.2],[39.1,99.8],[38.925,100.449]],mk:[{p:[38.925,100.449],i:iSt,n:'张掖',d:'七彩丹霞 · 世界地质公园'}]},
+  {d:'Day 42',t:'张掖 → 武威 → 兰州',r:'550km',dist:'550km',hl:'雷台汉墓 · 🏠 到家！',
+   co:[[38.925,100.449],[38.7,100.8],[38.5,101.3],[38.2,102.0],[37.928,102.634],[37.3,102.8],[36.8,103.0],[36.3,103.5],[36.058,103.823]],mk:[{p:[36.058,103.823],i:iHm,n:'兰州',d:'🏠 到家！'}]},
+];
+
+const altRoutes={
+  alar:{name:'阿拉尔安全返程',color:'#14b8a6',segs:[
+    {n:'和田→喀什（西返）',c:'#14b8a6',w:3,p:[[37.114,79.925],[37.4,79.4],[37.8,78.8],[38.3,78.0],[38.8,77.2],[39.2,76.5],[39.470,75.989]]},
+    {n:'喀什→阿克苏',c:'#14b8a6',w:3,p:[[39.470,75.989],[39.6,76.5],[39.9,77.5],[40.3,78.5],[40.8,79.5],[41.168,80.260]]},
+    {n:'阿克苏→阿拉尔',c:'#14b8a6',w:3,p:[[41.168,80.260],[40.9,80.5],[40.7,80.8],[40.547,81.281]]},
+    {n:'阿拉尔→沙漠公路零公里→轮台',c:'#14b8a6',w:3,p:[[40.547,81.281],[40.7,81.8],[40.9,82.3],[41.1,82.7],[41.3,83.0],[41.6,83.1],[41.9,83.1],[42.108,82.957]]},
+    {n:'轮台→库尔勒',c:'#14b8a6',w:2.5,p:[[42.108,82.957],[42.0,84.0],[41.9,85.0],[41.764,86.145]]},
+    {n:'库尔勒→乌鲁木齐',c:'#14b8a6',w:2.5,p:[[41.764,86.145],[42.0,85.5],[42.5,84.5],[43.0,85.0],[43.5,86.5],[43.825,87.616]]},
+  ],mks:[
+    {p:[40.547,81.281],i:iCh,n:'阿拉尔',d:'塔里木河畔新城 ⚡充电 · 沙漠公路零公里'},
+    {p:[41.4,83.1],i:mi('🍂',13),n:'沙雅胡杨林',d:'🍂 塔里木原始胡杨林 · 比轮台更原始壮观'},
+    {p:[41.1,82.7],i:mi('📍',12),n:'沙漠公路零公里',d:'G217起点标志 · 打卡拍照'},
+  ]},
+  desert:{name:'沙漠公路方案',color:'#ef4444',segs:[
+    {n:'民丰→轮台（沙漠公路522km）',c:'#ef4444',w:3,p:[[37.064,82.683],[37.3,82.8],[37.6,83.0],[38.0,83.2],[38.4,83.3],[38.8,83.4],[39.2,83.5],[39.6,83.6],[40.0,83.7],[40.5,83.8],[41.0,83.5],[41.5,83.2],[42.108,82.957]],d:'8,6'},
+    {n:'轮台→库尔勒',c:'#ef4444',w:2.5,p:[[42.108,82.957],[42.0,84.0],[41.9,85.0],[41.764,86.145]],d:'8,6'},
+    {n:'库尔勒→乌鲁木齐',c:'#ef4444',w:2.5,p:[[41.764,86.145],[42.0,85.5],[42.5,84.5],[43.0,85.0],[43.5,86.5],[43.825,87.616]],d:'8,6'},
+  ],mks:[{p:[39.5,83.3],i:iRi,n:'塔克拉玛干沙漠公路',d:'⚠️ 522km无充电！Tesla慎入'}]},
+  g315:{name:'G315入南疆',color:'#f59e0b',segs:[
+    {n:'茫崖→若羌',c:'#f59e0b',w:2.5,p:[[38.238,91.210],[38.5,90.5],[38.8,89.5],[38.9,88.8],[39.013,88.174]],d:'6,4'},
+    {n:'若羌→且末',c:'#f59e0b',w:2,p:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,85.8],[38.145,85.529]],d:'6,4'},
+    {n:'且末→民丰',c:'#f59e0b',w:2,p:[[38.145,85.529],[37.8,85.0],[37.5,84.0],[37.2,83.2],[37.064,82.683]],d:'6,4'},
+    {n:'民丰→和田',c:'#f59e0b',w:2,p:[[37.064,82.683],[37.05,81.8],[37.05,81.0],[37.08,80.5],[37.114,79.925]],d:'6,4'},
+  ],mks:[{p:[38.6,89.0],i:iRi,n:'G315无人区',d:'⚠️ 连续1000km充电极稀缺'}]},
+};
+
+const confLines=[],layers={};
+days.forEach((d,i)=>{
+  if(d.co.length<2)return;
+  const c=d.pc||'#666';
+  const l=L.polyline(d.co,{color:c,weight:2.5,opacity:.45}).addTo(map);
+  l.bindTooltip(d.d+' '+d.t,{sticky:true,className:'rt'});
+  confLines.push(l);
+});
+Object.keys(altRoutes).forEach(k=>{
+  const ar=altRoutes[k];const ls=[];
+  ar.segs.forEach(s=>{const o={color:s.c,weight:s.w,opacity:.5};if(s.d)o.dashArray=s.d;ls.push(L.polyline(s.p,o))});
+  const mks=(ar.mks||[]).map(m=>L.marker(m.p,{icon:m.i}).bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`));
+  layers[k]={lines:ls,markers:mks,visible:k==='alar'};
+});
+layers.alar.lines.forEach(l=>l.addTo(map));layers.alar.markers.forEach(m=>m.addTo(map));
+
+const allMks=[];
+days.forEach(d=>{(d.mk||[]).forEach(m=>{
+  const mk=L.marker(m.p,{icon:m.i}).addTo(map);mk.bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`);
+  L.marker(m.p,{icon:L.divIcon({html:`<span class="cl">${m.n}</span>`,className:'',iconSize:[60,14],iconAnchor:[-6,7]}),interactive:false}).addTo(map);
+  allMks.push(mk);
+})});
+
+const daysEl=document.getElementById('days');let curPh='';
+days.forEach((d,i)=>{
+  if(d.ph&&d.ph!==curPh){curPh=d.ph;const sec=document.createElement('div');sec.className='sec';sec.innerHTML=`<h2><span class="d" style="background:${d.pc}"></span>${curPh}</h2>`;daysEl.appendChild(sec)}
+  const el=document.createElement('div');el.className='di';el.dataset.idx=i;
+  let h=`<div class="dl">${d.d}｜${d.t}</div><div class="dr">${d.dist||d.r}</div>`;
+  if(d.hl)h+=`<div class="dh">${d.hl}</div>`;
+  if(d.w)h+=`<div class="dw">${d.w}</div>`;if(d.dd)h+=`<div class="dd">${d.dd}</div>`;
+  el.innerHTML=h;el.onclick=()=>selectDay(i);daysEl.lastChild.appendChild(el);
+});
+
+let selIdx=-1;const hlLines=[],hlMks=[];
+function selectDay(idx){
+  hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;
+  document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));
+  const d=days[idx];selIdx=idx;
+  document.querySelectorAll('.di').forEach(c=>{if(parseInt(c.dataset.idx)===idx)c.classList.add('act')});
+  confLines.forEach(l=>l.setStyle({opacity:.15,weight:1.5}));
+  if(d.co.length>=2){const hl=L.polyline(d.co,{color:d.pc||'#60a5fa',weight:5,opacity:.9}).addTo(map);hlLines.push(hl)}
+  (d.mk||[]).forEach(m=>{const mk=L.marker(m.p,{icon:m.i,zIndexOffset:1000}).addTo(map);mk.bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`);hlMks.push(mk)});
+  if(d.co.length>=2)map.fitBounds(d.co,{padding:[80,80],maxZoom:9});
+  else if(d.co.length===1)map.flyTo(d.co[0],10,{duration:1});
+  const di=document.getElementById('dayInfo');document.getElementById('diDay').textContent=d.d;
+  let txt=`<strong>${d.t}</strong>`;if(d.r)txt+=`<div class="meta">${d.r}</div>`;if(d.hl)txt+=`<div class="meta">${d.hl}</div>`;
+  document.getElementById('diText').innerHTML=txt;di.classList.add('show');
+  document.getElementById('ovTxt').textContent=d.d+' · '+d.t;
+}
+function resetView(){
+  selIdx=-1;hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;
+  confLines.forEach(l=>l.setStyle({opacity:.45,weight:2.5}));
+  document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));
+  map.flyTo([39,90],4,{duration:1});
+  document.getElementById('dayInfo').classList.remove('show');document.getElementById('ovTxt').textContent='全程总览';
+}
+function togAlt(key,btn){
+  btn.classList.toggle('on');const vis=btn.classList.contains('on');const al=layers[key];if(!al)return;
+  if(vis){al.lines.forEach(l=>l.addTo(map));al.markers.forEach(m=>m.addTo(map))}
+  else{al.lines.forEach(l=>map.removeLayer(l));al.markers.forEach(m=>map.removeLayer(m))}
+}
+map.fitBounds(days.flatMap(d=>d.co),{padding:[25,25]});
+const sty=document.createElement('style');sty.textContent='.rt{background:rgba(10,10,26,.92)!important;border:1px solid #333!important;color:#fff!important;font-size:10px!important;border-radius:4px!important;padding:2px 7px!important}';document.head.appendChild(sty);
+</script>
+</body>
+</html>

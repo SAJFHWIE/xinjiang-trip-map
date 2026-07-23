@@ -37,8 +37,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .mi{display:flex;align-items:center;justify-content:center;background:none;border:none}
 .cl{font-size:8px;color:#fff;font-weight:600;text-shadow:0 1px 3px rgba(0,0,0,.9),0 0 5px rgba(0,0,0,.7);white-space:nowrap}
 .pp{font-size:11px;line-height:1.5;max-width:180px}.pp strong{color:#1a73e8;font-size:12px}
-/* Detail panel */
-.detail-panel{position:absolute;bottom:0;left:340px;right:0;background:rgba(10,10,26,.95);border-top:1px solid #2a2a4a;z-index:999;max-height:35vh;overflow-y:auto;backdrop-filter:blur(8px);display:none}
+.detail-panel{position:absolute;bottom:0;left:340px;right:0;background:rgba(10,10,26,.95);border-top:1px solid #2a2a4a;z-index:999;max-height:40vh;overflow-y:auto;backdrop-filter:blur(8px);display:none}
 .detail-panel.show{display:block}
 .dp-header{padding:8px 14px;border-bottom:1px solid #1e1e3a;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;background:rgba(10,10,26,.98)}
 .dp-header h3{font-size:12px;color:#fff}
@@ -46,28 +45,30 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
 .dp-nav button{padding:3px 10px;border-radius:8px;border:1px solid #333;background:transparent;color:#888;font-size:10px;cursor:pointer}.dp-nav button:hover{color:#fff;background:#222}
 .dp-stops{display:flex;overflow-x:auto;padding:8px 14px;gap:8px;scrollbar-width:none}
 .dp-stops::-webkit-scrollbar{display:none}
-.dp-stop{flex-shrink:0;padding:8px 12px;border-radius:8px;background:#16162e;cursor:pointer;transition:all .15s;min-width:140px;border:1px solid transparent}
+.dp-stop{flex-shrink:0;padding:8px 12px;border-radius:8px;background:#16162e;cursor:pointer;transition:all .15s;min-width:160px;border:1px solid transparent}
 .dp-stop:hover{border-color:#60a5fa}.dp-stop.active{background:#1a1a40;border-color:#60a5fa}
-.dp-stop .sn{font-size:10px;font-weight:700;color:#60a5fa;margin-bottom:2px}
+.dp-stop .sn{font-size:9px;font-weight:700;color:#60a5fa;margin-bottom:2px}
 .dp-stop .sname{font-size:11px;color:#fff;font-weight:600;margin-bottom:2px}
 .dp-stop .scat{font-size:9px;color:#888}
 .dp-stop .shours{font-size:9px;color:#666;margin-top:2px}
 .dp-stop .sdesc{font-size:9px;color:#aaa;margin-top:3px;line-height:1.4}
-.dp-info{padding:8px 14px;border-top:1px solid #1e1e3a;display:flex;gap:16px}
+.dp-stop .sguide{font-size:8px;color:#60a5fa;margin-top:3px;text-decoration:underline;cursor:pointer}
+.dp-info{padding:8px 14px;border-top:1px solid #1e1e3a}
+.dp-info-row{display:flex;gap:12px;margin-bottom:6px}
 .dp-info-section{flex:1}
-.dp-info-section h4{font-size:9px;color:#666;margin-bottom:4px;letter-spacing:.5px}
-.dp-info-item{font-size:10px;color:#ccc}.dp-info-item .iname{font-weight:600;color:#fff}.dp-info-item .idetail{color:#888;font-size:9px}
-@media(max-width:768px){#sidebar{width:100%;min-width:100%;height:40vh;border-right:none;border-bottom:1px solid #2a2a4a}body{flex-direction:column}#map{height:60vh}.detail-panel{left:0;max-height:30vh}}
+.dp-info-section h4{font-size:9px;color:#666;margin-bottom:3px;letter-spacing:.5px}
+.dp-info-item{font-size:10px;color:#ccc;margin-bottom:2px}.dp-info-item .iname{font-weight:600;color:#fff}.dp-info-item .idetail{color:#888;font-size:9px}
+@media(max-width:768px){#sidebar{width:100%;min-width:100%;height:40vh;border-right:none;border-bottom:1px solid #2a2a4a}body{flex-direction:column}#map{height:60vh}.detail-panel{left:0;max-height:35vh}}
 </style>
 </head>
 <body>
 <div id="sidebar">
   <div class="hdr">
     <h1>兰州出发 · 新疆自驾环线</h1>
-    <p>点击左侧日期查看当天详细路线</p>
+    <p>约60天深度游 · 点击左侧日期查看当天详细路线</p>
     <div class="sts">
-      <div class="st"><div class="n">~13k</div><div class="l">总里程km</div></div>
-      <div class="st"><div class="n">42</div><div class="l">总天数</div></div>
+      <div class="st"><div class="n">~15k</div><div class="l">总里程km</div></div>
+      <div class="st"><div class="n">60</div><div class="l">总天数</div></div>
       <div class="st"><div class="n">4.7k</div><div class="l">最高海拔m</div></div>
       <div class="st"><div class="n">⚡</div><div class="l">Model Y</div></div>
     </div>
@@ -80,32 +81,34 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   </div>
   <div class="ov"><span id="ovTxt">全程总览 · 点击日期查看详情</span><button onclick="resetView()" id="resetBtn" style="display:none">↩ 返回总览</button></div>
   <div id="days"></div>
-  <div class="warn"><h4>⚠️ 高原反应提醒</h4><p>Day 3翻越达坂山(3940m)为全程最高海拔，初次入高原者请提前服用红景天，携带血氧仪和氧气罐。</p></div>
+  <div class="warn"><h4>⚠️ 高原反应提醒</h4><p>Day 5翻越拉脊山(3820m)、Day 14翻越达坂山(3940m)为高海拔路段，初次入高原者请提前服用红景天，携带血氧仪和氧气罐。</p></div>
   <div class="lg">
     <h3>图例</h3>
-    <div class="li"><div class="ll" style="background:#f59e0b"></div>青海入疆 Day 1-9</div>
-    <div class="li"><div class="ll" style="background:#10b981"></div>进疆 Day 10-13</div>
-    <div class="li"><div class="ll" style="background:#8b5cf6"></div>北疆阿勒泰 Day 14-19</div>
-    <div class="li"><div class="ll" style="background:#06b6d4"></div>独库公路+伊犁 Day 20-24</div>
-    <div class="li"><div class="ll" style="background:#f43f5e"></div>南疆环线 Day 25-33</div>
-    <div class="li"><div class="ll" style="background:#22c55e"></div>返程·河西走廊 Day 34-42</div>
-    <div class="li"><div class="ll" style="background:#14b8a6"></div> 备选：阿拉尔安全返程</div>
-    <div class="li"><div class="ll" style="background:#ef4444"></div>🏜 备选：沙漠公路</div>
-    <div class="li"><div class="ll" style="background:#f59e0b;opacity:.5"></div>⚠️ 备选：G315入南疆</div>
+    <div class="li"><div class="ll" style="background:#f59e0b"></div>甘肃段 Day 1-6</div>
+    <div class="li"><div class="ll" style="background:#e67e22"></div>青海湖环湖 Day 7-10</div>
+    <div class="li"><div class="ll" style="background:#f59e0b"></div>青海入疆 Day 11-18</div>
+    <div class="li"><div class="ll" style="background:#10b981"></div>进疆 Day 19-22</div>
+    <div class="li"><div class="ll" style="background:#8b5cf6"></div>北疆阿勒泰 Day 23-30</div>
+    <div class="li"><div class="ll" style="background:#06b6d4"></div>独库公路+伊犁 Day 31-36</div>
+    <div class="li"><div class="ll" style="background:#f43f5e"></div>南疆环线 Day 37-48</div>
+    <div class="li"><div class="ll" style="background:#22c55e"></div>返程·河西走廊 Day 49-60</div>
+    <div class="li"><div class="ll" style="background:#14b8a6"></div>🛡 备选：阿拉尔安全返程</div>
     <div class="li"><div class="ld" style="background:#22c55e"></div>⚡ 特斯拉超充</div>
     <div class="li"><div class="ld" style="background:#f59e0b"></div>⚠️ 第三方/需确认</div>
-    <div class="li"><div class="ld" style="background:#a855f7"></div>🏛 楼兰博物馆</div>
-    <div class="li"><div class="ld" style="background:#eab308"></div>🍂 轮台胡杨林</div>
+    <div class="li"><div class="ld" style="background:#a855f7"></div>🏛 楼兰/龟兹博物馆</div>
+    <div class="li"><div class="ld" style="background:#eab308"></div> 胡杨林</div>
+    <div class="li"><div class="ld" style="background:#3b82f6"></div>⛺ 推荐露营地</div>
   </div>
 </div>
 <div id="map"></div>
-<!-- Detail panel -->
 <div class="detail-panel" id="detailPanel">
   <div class="dp-header"><h3 id="dpTitle">Day 1</h3><div class="dp-nav"><button onclick="prevStop()">← 上一站</button><button onclick="nextStop()">下一站 →</button></div></div>
   <div class="dp-stops" id="dpStops"></div>
   <div class="dp-info">
-    <div class="dp-info-section"><h4>🏨 住宿推荐</h4><div class="dp-info-item"><div class="iname" id="dpHotel">-</div><div class="idetail" id="dpHotelD">-</div></div></div>
-    <div class="dp-info-section"><h4>🍜 餐饮推荐</h4><div class="dp-info-item"><div class="iname" id="dpFood">-</div><div class="idetail" id="dpFoodD">-</div></div></div>
+    <div class="dp-info-row">
+      <div class="dp-info-section"><h4>🏨 住宿推荐</h4><div id="dpHotels"></div></div>
+      <div class="dp-info-section"><h4>🍜 美食推荐</h4><div id="dpFoods"></div></div>
+    </div>
   </div>
 </div>
 <script>
@@ -114,191 +117,366 @@ L.control.zoom({position:'topright'}).addTo(map);
 L.tileLayer('https://{s}.basemaps.cartocdn.com/dark_all/{z}/{x}/{y}{r}.png',{attribution:'&copy; OSM & CartoDB',maxZoom:19,subdomains:'abcd'}).addTo(map);
 
 function mi(e,s){return L.divIcon({html:`<span style="font-size:${s||14}px;filter:drop-shadow(0 1px 2px rgba(0,0,0,.6))">${e}</span>`,className:'mi',iconSize:[(s||14)+6,(s||14)+6],iconAnchor:[(s||14)/2+3,(s||14)/2+3]})}
-const iC=mi('',14),iCh=mi('',13),iSc=mi('',13),iCa=mi('⛺',12),iRi=mi('⚠️',12),iSt=mi('⭐',14),iMu=mi('🏛',14),iHu=mi('🍂',14),iHm=mi('🏠',15);
+const iC=mi('🏙',14),iCh=mi('⚡',13),iSc=mi('🏔',13),iCa=mi('⛺',12),iRi=mi('⚠️',12),iSt=mi('⭐',14),iMu=mi('🏛',14),iHu=mi('🍂',14),iHm=mi('🏠',15),iLk=mi('🌊',13),iTp=mi('🛕',13);
 
+// ===== Trip Data (60 days) =====
 const days=[
-  {ph:'青海入疆',pc:'#f59e0b',d:'Day 1',t:'兰州',r:'出发准备',dist:'市内30km',hl:'甘肃省博 · 黄河铁桥',
-   co:[[36.058,103.823]],mk:[{p:[36.058,103.823],i:iHm,n:'兰州',d:'出发地 · 海拔1520m'}],
-   stops:[{name:'甘肃省博物馆',cat:'博物馆',coord:[36.040,103.758],hours:'周二至周日 9:00-17:00',desc:'马踏飞燕原件，免费，周一闭馆'},
-          {name:'中山桥',cat:'景点',coord:[36.065,103.817],hours:'全天开放',desc:'黄河铁桥，兰州地标'},
-          {name:'白塔山公园',cat:'公园',coord:[36.072,103.825],hours:'6:00-20:00',desc:'俯瞰黄河穿城而过'}],
-   hotel:{name:'兰州万达文华酒店',detail:'¥400-600/晚，近黄河'},food:{name:'正宁路夜市',detail:'牛奶鸡蛋醪糟、烤羊肉串'}},
-  {d:'Day 2',t:'兰州 → 西宁',r:'220km · 2.5h',dist:'220km',hl:'塔尔寺 · 东关清真大寺',w:'⛰ 海拔2260m',
-   co:[[36.058,103.823],[36.2,103.0],[36.4,102.3],[36.55,101.9],[36.617,101.778]],mk:[{p:[36.617,101.778],i:iC,n:'西宁',d:'塔尔寺 · 海拔2260m'}],
-   stops:[{name:'塔尔寺',cat:'寺庙',coord:[36.482,101.570],hours:'8:00-17:30',desc:'藏传佛教格鲁派六大寺院之一，门票70元'},
-          {name:'东关清真大寺',cat:'寺庙',coord:[36.615,101.790],hours:'8:00-20:00',desc:'西北四大清真寺之一，免费'}],
-   hotel:{name:'西宁神旺大酒店',detail:'¥300-500/晚，近东关'},food:{name:'水井巷市场',detail:'青海酸奶、酿皮、手抓羊肉'}},
-  {d:'Day 3',t:'西宁 → 门源',r:'160km · 3h',dist:'160km',hl:'达坂山(3940m) · 高原草甸',w:'️ 高反风险最高',
-   co:[[36.617,101.778],[36.8,101.6],[37.05,101.5],[37.2,101.55],[37.377,101.612]],mk:[{p:[37.377,101.612],i:iSc,n:'门源',d:'达坂山3940m · 海拔3000m'}],
-   stops:[{name:'达坂山观景台',cat:'观景台',coord:[36.920,101.530],hours:'全天',desc:'海拔3940m，俯瞰门源盆地全景'},
-          {name:'门源百里花海',cat:'自然景观',coord:[37.377,101.612],hours:'全天',desc:'9月草甸秋色渐浓'}],
-   hotel:{name:'门源浩云饭店',detail:'¥200-350/晚'},food:{name:'门源县城餐厅',detail:'牦牛肉火锅、青稞饼'}},
-  {d:'Day 4',t:'门源 → 祁连',r:'150km · 3h',dist:'150km',hl:'卓尔山 · 祁连山草原',
-   co:[[37.377,101.612],[37.55,101.2],[37.8,100.8],[38.0,100.5],[38.177,100.253]],mk:[{p:[38.177,100.253],i:iSt,n:'祁连',d:'卓尔山 · 东方小瑞士'}],
-   stops:[{name:'卓尔山',cat:'景区',coord:[38.180,100.240],hours:'8:00-18:00',desc:'东方小瑞士，红色丹霞+草甸+雪山，日落最美'},
+  {ph:'甘肃段',pc:'#f59e0b',d:'Day 1',t:'兰州',r:'出发准备',dist:'市内',hl:'甘肃省博 · 黄河风情线',
+   co:[[36.058,103.823],[36.040,103.758],[36.065,103.817],[36.072,103.825]],
+   mk:[{p:[36.058,103.823],i:iHm,n:'兰州',d:'出发地'}],
+   stops:[{name:'甘肃省博物馆',cat:'博物馆',coord:[36.040,103.758],hours:'周二至周日 9:00-17:00',desc:'马踏飞燕原件，免费，周一闭馆。建议预留2-3小时。',guide:'小红书搜"甘肃省博物馆攻略"'},
+          {name:'中山桥',cat:'景点',coord:[36.065,103.817],hours:'全天',desc:'黄河第一桥，夜景很美',guide:'小红书搜"兰州中山桥夜景"'},
+          {name:'白塔山公园',cat:'公园',coord:[36.072,103.825],hours:'6:00-20:00',desc:'俯瞰黄河穿城而过',guide:'小红书搜"白塔山公园"'}],
+   hotels:[{name:'兰州万达文华酒店',detail:'¥400-600/晚，近黄河'},{name:'兰州皇冠假日酒店',detail:'¥500-800/晚'},{name:'⛺ 黄河边床车露营',detail:'免费，注意停车规定'}],
+   foods:[{name:'正宁路夜市',detail:'牛奶鸡蛋醪糟、烤羊肉串'},{name:'张掖路大众巷',detail:'马子禄牛肉面、杜记甜食'},{name:'南关民族风味一条街',detail:'手抓羊肉、黄焖羊肉'}]},
+
+  {d:'Day 2',t:'兰州 → 刘家峡 → 炳灵寺',r:'200km · 4h',dist:'200km',hl:'炳灵寺石窟 · 刘家峡水库',
+   co:[[36.058,103.823],[35.95,103.5],[35.85,103.3],[35.807,103.220]],
+   mk:[{p:[35.807,103.220],i:iTp,n:'炳灵寺',d:'炳灵寺石窟 · 世界遗产'}],
+   stops:[{name:'刘家峡水库',cat:'自然景观',coord:[35.850,103.250],hours:'8:00-17:00',desc:'黄河上游最大水库，碧水蓝天，可乘船',guide:'小红书搜"刘家峡水库自驾"'},
+          {name:'炳灵寺石窟',cat:'世界遗产',coord:[35.807,103.220],hours:'8:00-17:00',desc:'丝绸之路重要石窟，需乘船进入，门票+船票约150元。比莫高窟人少很多，非常值得！',guide:'小红书搜"炳灵寺石窟攻略"'}],
+   hotels:[{name:'永靖县宾馆',detail:'¥150-300/晚'},{name:'⛺ 刘家峡水库边露营',detail:'免费，风景绝佳'}],
+   foods:[{name:'永靖黄河鲤鱼',detail:'刘家峡特色，红烧/清蒸'},{name:'东乡手抓',detail:'东乡族特色羊肉'}]},
+
+  {d:'Day 3',t:'炳灵寺 → 西宁',r:'200km · 3h',dist:'200km',hl:'塔尔寺 · 东关清真大寺',
+   co:[[35.807,103.220],[36.0,102.5],[36.3,102.0],[36.482,101.570],[36.617,101.778]],
+   mk:[{p:[36.617,101.778],i:iC,n:'西宁',d:'塔尔寺 · 海拔2260m'}],
+   stops:[{name:'塔尔寺',cat:'寺庙',coord:[36.482,101.570],hours:'8:00-17:30',desc:'藏传佛教格鲁派六大寺院之一，门票70元。建议请讲解。',guide:'小红书搜"塔尔寺一日游攻略"'},
+          {name:'东关清真大寺',cat:'寺庙',coord:[36.615,101.790],hours:'8:00-20:00',desc:'西北四大清真寺之一，免费',guide:'小红书搜"西宁东关清真大寺"'}],
+   hotels:[{name:'西宁神旺大酒店',detail:'¥300-500/晚'},{name:'西宁新华联索菲特大酒店',detail:'¥500-800/晚'},{name:'⛺ 水河边露营',detail:'免费'}],
+   foods:[{name:'水井巷市场',detail:'青海酸奶、酿皮、手抓羊肉'},{name:'莫家街',detail:'马忠食府、尕面片'},{name:'新千夜市',detail:'各种西北小吃'}]},
+
+  {d:'Day 4',t:'西宁 → 青海湖（东岸）',r:'150km · 2.5h',dist:'150km',hl:'日月山 · 倒淌河 · 青海湖东岸',
+   co:[[36.617,101.778],[36.4,101.2],[36.3,100.8],[36.550,100.600]],
+   mk:[{p:[36.550,100.600],i:iLk,n:'青海湖',d:'中国最大内陆湖 · 环湖起点'}],
+   stops:[{name:'日月山',cat:'景点',coord:[36.400,101.200],hours:'8:00-18:00',desc:'文成公主进藏途经地，海拔3520m',guide:'小红书搜"日月山自驾"'},
+          {name:'倒淌河',cat:'景点',coord:[36.350,100.900],hours:'8:00-18:00',desc:'"天下河水皆向东，唯有此溪向西流"'},
+          {name:'青海湖东岸',cat:'湖泊',coord:[36.550,100.600],hours:'全天',desc:'青海湖东岸观景，9月湖水湛蓝，油菜花已过但草甸秋色美',guide:'小红书搜"青海湖环湖自驾攻略"'}],
+   hotels:[{name:'青海湖二郎剑景区附近酒店',detail:'¥300-600/晚'},{name:' 青海湖湖边露营',detail:'免费，星空绝美，注意保暖'}],
+   foods:[{name:'青海湖鱼',detail:'当地特色（注意保护政策）'},{name:'牧民家酸奶',detail:'路边牧民家自制酸奶'}]},
+
+  {d:'Day 5',t:'青海湖环湖（南岸）',r:'200km',dist:'200km',hl:'二郎剑 · 黑马河 · 环湖南岸',
+   co:[[36.550,100.600],[36.450,100.400],[36.350,100.200],[36.250,100.050]],
+   mk:[{p:[36.350,100.200],i:iCa,n:'黑马河',d:'环湖中转站 · ⛺露营'}],
+   stops:[{name:'二郎剑景区',cat:'景区',coord:[36.450,100.400],hours:'8:00-18:00',desc:'青海湖最著名景区，门票90元',guide:'小红书搜"青海湖二郎剑"'},
+          {name:'黑马河镇',cat:'小镇',coord:[36.350,100.200],hours:'-',desc:'环湖中转站，日出观赏点',guide:'小红书搜"黑马河日出"'}],
+   hotels:[{name:'黑马河镇宾馆',detail:'¥200-400/晚'},{name:'⛺ 黑马河湖边露营',detail:'免费，日出绝佳位置'}],
+   foods:[{name:'黑马河镇餐厅',detail:'牦牛肉火锅、面片'}]},
+
+  {d:'Day 6',t:'青海湖环湖（西岸+北岸）',r:'250km',dist:'250km',hl:'鸟岛 · 刚察 · 沙岛',
+   co:[[36.250,100.050],[36.500,99.700],[36.800,99.500],[36.950,100.200]],
+   mk:[{p:[36.950,100.200],i:iLk,n:'刚察',d:'环湖北岸'}],
+   stops:[{name:'鸟岛',cat:'景区',coord:[36.500,99.700],hours:'8:00-17:00',desc:'9月候鸟南迁，可能看不到太多鸟，但湖景美',guide:'小红书搜"青海湖鸟岛"'},
+          {name:'刚察县',cat:'县城',coord:[36.800,99.500],hours:'-',desc:'环湖北岸小镇，藏族风情'},
+          {name:'沙岛',cat:'景点',coord:[36.950,100.200],hours:'8:00-18:00',desc:'湖中沙丘，可滑沙'}],
+   hotels:[{name:'刚察县宾馆',detail:'¥150-300/晚'},{name:'⛺ 刚察湖边露营',detail:'免费'}],
+   foods:[{name:'刚察藏餐',detail:'糌粑、酥油茶、牛肉'}]},
+
+  {ph:'青海入疆',pc:'#f59e0b',d:'Day 7',t:'刚察 → 门源',r:'200km · 3.5h',dist:'200km',hl:'达坂山 · 门源草甸秋色',w:'⛰ 海拔3000m+',
+   co:[[36.950,100.200],[37.1,100.5],[37.2,101.0],[37.377,101.612]],
+   mk:[{p:[37.377,101.612],i:iSc,n:'门源',d:'达坂山 · 海拔3000m'}],
+   stops:[{name:'达坂山观景台',cat:'观景台',coord:[36.920,101.530],hours:'全天',desc:'海拔3940m，俯瞰门源盆地全景',guide:'小红书搜"达坂山观景台"'},
+          {name:'门源百里花海',cat:'自然景观',coord:[37.377,101.612],hours:'全天',desc:'9月草甸秋色渐浓，虽无油菜花但秋景美'}],
+   hotels:[{name:'门源浩云饭店',detail:'¥200-350/晚'},{name:'⛺ 门源草原露营',detail:'免费'}],
+   foods:[{name:'门源县城餐厅',detail:'牛肉火锅、青稞饼'}]},
+
+  {d:'Day 8',t:'门源 → 祁连',r:'150km · 3h',dist:'150km',hl:'卓尔山 · 祁连山草原',
+   co:[[37.377,101.612],[37.55,101.2],[37.8,100.8],[38.177,100.253]],
+   mk:[{p:[38.177,100.253],i:iSt,n:'祁连',d:'卓尔山 · 东方小瑞士'}],
+   stops:[{name:'卓尔山',cat:'景区',coord:[38.180,100.240],hours:'8:00-18:00',desc:'东方小瑞士，红色丹霞+草甸+雪山，日落最美。门票60元。',guide:'小红书搜"卓尔山日落攻略"'},
           {name:'牛心山',cat:'自然景观',coord:[38.177,100.253],hours:'全天',desc:'卓尔山对面雪山，完美对称'}],
-   hotel:{name:'祁连天境酒店',detail:'¥250-400/晚'},food:{name:'祁连县城餐厅',detail:'炕锅羊肉、羊肠面'}},
-  {d:'Day 5',t:'祁连 → 德令哈',r:'430km · 5.5h',dist:'430km',hl:'穿越柴达木盆地 · 情人湖',
-   co:[[38.177,100.253],[38.0,99.5],[37.8,98.5],[37.5,97.8],[37.370,97.370]],mk:[{p:[37.370,97.370],i:iSc,n:'德令哈',d:'海子诗歌纪念馆'}],
-   stops:[{name:'可鲁克湖-托素湖',cat:'湖泊',coord:[37.350,97.100],hours:'全天',desc:'情人湖，一淡一咸'},
-          {name:'海子诗歌纪念馆',cat:'博物馆',coord:[37.370,97.370],hours:'9:00-17:00',desc:'"姐姐，今夜我在德令哈"'}],
-   hotel:{name:'德令哈海子酒店',detail:'¥200-350/晚'},food:{name:'德令哈市区餐厅',detail:'青海土火锅、酿皮'}},
-  {d:'Day 6',t:'德令哈 → 大柴旦',r:'200km · 2.5h',dist:'200km',hl:'翡翠湖 · 床车露营',
-   co:[[37.370,97.370],[37.5,96.8],[37.65,96.2],[37.75,95.7],[37.856,95.349]],mk:[{p:[37.856,95.349],i:iCh,n:'大柴旦',d:'翡翠湖 ⚡充电'}],
-   stops:[{name:'大柴旦翡翠湖',cat:'湖泊',coord:[37.870,95.350],hours:'全天开放',desc:'多彩盐湖，免费，碧绿/湛蓝/奶白'}],
-   hotel:{name:'大柴旦翡翠湖营地',detail:'床车露营或镇上宾馆¥200-400'},food:{name:'大柴旦镇餐厅',detail:'羊肉面片、炕锅肉'}},
-  {d:'Day 7',t:'大柴旦 → 茫崖',r:'350km · 4h',dist:'350km',hl:'U型公路 · 水上雅丹 · 翡翠湖',dd:'️ 无人区',
-   co:[[37.856,95.349],[37.9,94.5],[38.0,93.5],[38.1,92.5],[38.238,91.210]],mk:[{p:[38.238,91.210],i:iSc,n:'茫崖',d:'翡翠湖 · 艾肯泉 · 公共桩64台'}],
-   stops:[{name:'U型公路',cat:'打卡点',coord:[37.800,93.500],hours:'全天',desc:'G315网红公路，视觉奇观'},
-          {name:'水上雅丹',cat:'景区',coord:[37.750,92.550],hours:'8:00-18:00',desc:'世界唯一水上雅丹，门票120元'},
-          {name:'茫崖翡翠湖',cat:'湖泊',coord:[38.238,91.210],hours:'全天',desc:'碧绿色盐湖，免费'}],
-   hotel:{name:'茫崖花土沟宾馆',detail:'¥200-350/晚'},food:{name:'茫崖镇餐厅',detail:'新疆拌面、烤包子'}},
-  {d:'Day 8',t:'茫崖 → 冷湖',r:'220km · 3h',dist:'220km',hl:'火星营地 · 石油小镇 · 星空',
-   co:[[38.238,91.210],[38.3,91.8],[38.35,92.5],[38.380,93.360]],mk:[{p:[38.380,93.360],i:iCa,n:'冷湖',d:'火星营地 · 星空绝美 · ⛺露营'}],
-   stops:[{name:'艾肯泉',cat:'自然景观',coord:[38.100,91.500],hours:'全天',desc:'恶魔之眼，需无人机航拍'},
-          {name:'冷湖火星营地',cat:'打卡点',coord:[38.380,93.360],hours:'9:00-18:00',desc:'模拟火星基地，可参观'}],
-   hotel:{name:'冷湖火星营地',detail:'床车露营，星空绝美'},food:{name:'冷湖镇餐厅',detail:'简单面食，建议自备干粮'}},
-  {d:'Day 9',t:'冷湖 → 敦煌',r:'180km · 2.5h',dist:'180km',hl:'莫高窟 · 鸣沙山月牙泉',
-   co:[[38.380,93.360],[38.8,93.5],[39.3,93.8],[39.7,94.2],[40.142,94.662]],mk:[{p:[40.142,94.662],i:iSt,n:'敦煌',d:'莫高窟 · 鸣沙山 · 月牙泉'}],
-   stops:[{name:'莫高窟',cat:'世界遗产',coord:[40.035,94.807],hours:'9:00-18:00',desc:'世界文化遗产，务必提前15-30天预约'},
-          {name:'鸣沙山月牙泉',cat:'景区',coord:[40.081,94.686],hours:'6:00-20:00',desc:'日落时分最美，骑骆驼、滑沙'}],
-   hotel:{name:'敦煌山庄',detail:'¥400-700/晚，近鸣沙山'},food:{name:'沙洲夜市',detail:'驴肉黄面、杏皮水、烤全羊'}},
-  {ph:'进疆',pc:'#10b981',d:'Day 10',t:'敦煌 → 哈密',r:'420km · 4.5h',dist:'420km',hl:'进疆！星星峡安检',
-   co:[[40.142,94.662],[40.6,94.2],[41.2,93.8],[42.0,93.6],[42.829,93.515]],mk:[{p:[42.829,93.515],i:iCh,n:'哈密',d:'进疆第一站 ⚡超充'}],
-   stops:[{name:'星星峡',cat:'打卡点',coord:[40.600,94.200],hours:'全天',desc:'甘新交界，安检站'},
+   hotels:[{name:'祁连天境酒店',detail:'¥250-400/晚'},{name:'祁连县宾馆',detail:'¥150-300/晚'},{name:'⛺ 卓尔山脚下露营',detail:'免费，雪山背景'}],
+   foods:[{name:'祁连县城餐厅',detail:'炕锅羊肉、羊肠面'}]},
+
+  {d:'Day 9',t:'祁连 → 张掖（马蹄寺）',r:'200km · 3.5h',dist:'200km',hl:'马蹄寺 · 临松薤谷',
+   co:[[38.177,100.253],[38.1,100.5],[38.3,100.4],[38.490,100.420],[38.925,100.449]],
+   mk:[{p:[38.490,100.420],i:iTp,n:'马蹄寺',d:'马蹄寺石窟 · 临松薤谷'}],
+   stops:[{name:'马蹄寺',cat:'世界遗产',coord:[38.490,100.420],hours:'8:00-17:30',desc:'河西走廊重要石窟群，三十三天石窟爬上去很刺激！门票74元。比莫高窟人少太多，非常推荐！',guide:'小红书搜"马蹄寺三十三天石窟攻略"'},
+          {name:'临松薤谷',cat:'自然景观',coord:[38.480,100.430],hours:'全天',desc:'马蹄寺旁的峡谷，瀑布+森林，小众秘境',guide:'小红书搜"临松薤谷"'}],
+   hotels:[{name:'张掖市区酒店',detail:'¥200-400/晚'},{name:'马蹄寺景区民宿',detail:'¥150-300/晚'},{name:'⛺ 马蹄寺停车场露营',detail:'免费'}],
+   foods:[{name:'张掖市区',detail:'搓鱼面、炮仗面、炒拨拉'},{name:'马蹄寺附近',detail:'简单面食'}]},
+
+  {d:'Day 10',t:'张掖',r:'市内',dist:'市内',hl:'七彩丹霞日落',
+   co:[[38.925,100.449],[38.952,100.088]],
+   mk:[{p:[38.925,100.449],i:iSt,n:'张掖',d:'七彩丹霞'}],
+   stops:[{name:'张掖七彩丹霞',cat:'世界地质公园',coord:[38.952,100.088],hours:'7:00-18:00',desc:'日落时分最佳，四个观景台。门票93元（含观光车）。建议下午4点后入园看日落。',guide:'小红书搜"张掖七彩丹霞日落攻略"'}],
+   hotels:[{name:'张掖丹霞口旅游度假小镇',detail:'¥300-600/晚，景区内'},{name:'张掖市区酒店',detail:'¥200-400/晚'}],
+   foods:[{name:'张掖市区',detail:'搓鱼面、炮仗面、炒拨拉、杏皮茶'}]},
+
+  {d:'Day 11',t:'张掖 → 嘉峪关',r:'230km · 2.5h',dist:'230km',hl:'天下第一雄关',
+   co:[[38.925,100.449],[39.1,99.8],[39.4,99.2],[39.773,98.289]],
+   mk:[{p:[39.773,98.289],i:iSc,n:'嘉峪关',d:'天下第一雄关'}],
+   stops:[{name:'嘉峪关关城',cat:'世界遗产',coord:[39.798,98.223],hours:'8:30-18:00',desc:'天下第一雄关，明长城西端起点。门票110元（含悬壁长城、第一墩）。',guide:'小红书搜"嘉峪关关城攻略"'},
+          {name:'悬壁长城',cat:'景点',coord:[39.850,98.250],hours:'8:30-18:00',desc:'长城倒挂山脊，壮观'}],
+   hotels:[{name:'嘉峪关酒店',detail:'¥250-450/晚'},{name:' 嘉峪关城外露营',detail:'免费'}],
+   foods:[{name:'嘉峪关烤肉',detail:'嘉峪关烤肉在甘肃很有名，必吃！'},{name:'大唐美食街',detail:'各种西北小吃'}]},
+
+  {d:'Day 12',t:'嘉峪关 → 敦煌',r:'380km · 4h',dist:'380km',hl:'鸣沙山月牙泉日落',
+   co:[[39.773,98.289],[39.9,97.5],[40.0,96.5],[39.9,95.5],[40.142,94.662]],
+   mk:[{p:[40.142,94.662],i:iSt,n:'敦煌',d:'莫高窟 · 鸣沙山'}],
+   stops:[{name:'鸣沙山月牙泉',cat:'景区',coord:[40.081,94.686],hours:'6:00-20:00',desc:'日落时分最美，骑骆驼、滑沙。门票110元。',guide:'小红书搜"鸣沙山月牙泉日落攻略"'}],
+   hotels:[{name:'敦煌山庄',detail:'¥400-700/晚，近鸣沙山'},{name:'敦煌国际酒店',detail:'¥300-500/晚'},{name:'⛺ 鸣沙山停车场露营',detail:'免费，注意规定'}],
+   foods:[{name:'沙洲夜市',detail:'驴肉黄面、杏皮水、烤全羊'},{name:'达记酱驴肉',detail:'敦煌特色'}]},
+
+  {d:'Day 13',t:'敦煌',r:'市内',dist:'市内',hl:'莫高窟 · 雅丹魔鬼城',
+   co:[[40.142,94.662],[40.035,94.807],[40.142,94.662],[39.8,93.5],[40.142,94.662]],
+   mk:[{p:[40.142,94.662],i:iSt,n:'敦煌',d:'莫高窟'}],
+   stops:[{name:'莫高窟',cat:'世界遗产',coord:[40.035,94.807],hours:'9:00-18:00',desc:'世界文化遗产，务必提前15-30天预约！数字电影+8个洞窟，门票238元（旺季）。建议请讲解。',guide:'小红书搜"莫高窟预约攻略2026"'},
+          {name:'雅丹国家地质公园',cat:'景区',coord:[39.800,93.500],hours:'7:00-19:00',desc:'魔鬼城，日落最美。距市区约180km，门票120元。',guide:'小红书搜"敦煌雅丹魔鬼城日落"'}],
+   hotels:[{name:'敦煌山庄',detail:'¥400-700/晚'},{name:'敦煌太阳温泉酒店',detail:'¥300-500/晚'}],
+   foods:[{name:'沙洲夜市',detail:'驴肉黄面、杏皮水'},{name:'靖远尕六羊羔肉',detail:'敦煌名店'}]},
+
+  {ph:'进疆',pc:'#10b981',d:'Day 14',t:'敦煌 → 哈密',r:'420km · 4.5h',dist:'420km',hl:'进疆！星星峡安检',
+   co:[[40.142,94.662],[40.6,94.2],[41.2,93.8],[42.0,93.6],[42.829,93.515]],
+   mk:[{p:[42.829,93.515],i:iCh,n:'哈密',d:'进疆第一站 ⚡超充'}],
+   stops:[{name:'星星峡',cat:'打卡点',coord:[40.600,94.200],hours:'全天',desc:'甘新交界，安检站，备好身份证'},
           {name:'哈密市区',cat:'城市',coord:[42.829,93.515],hours:'-',desc:'进疆第一站，时差约2小时'}],
-   hotel:{name:'哈密宾馆',detail:'¥300-500/晚'},food:{name:'哈密夜市',detail:'哈密瓜、烤肉、拌面'}},
-  {d:'Day 11',t:'哈密 → 吐鲁番',r:'410km · 4h',dist:'410km',hl:'火焰山 · 葡萄沟',
-   co:[[42.829,93.515],[42.9,92.5],[42.95,91.5],[42.95,90.5],[42.951,89.189]],mk:[{p:[42.951,89.189],i:iCh,n:'吐鲁番',d:'火焰山 · 葡萄沟 ⚡超充'}],
-   stops:[{name:'火焰山',cat:'景区',coord:[42.960,89.055],hours:'8:00-20:00',desc:'红色砂岩，打卡拍照'},
-          {name:'葡萄沟',cat:'景区',coord:[42.950,89.200],hours:'8:00-20:00',desc:'9月葡萄成熟季，品尝鲜葡萄'}],
-   hotel:{name:'吐鲁番双城宾馆',detail:'¥300-500/晚'},food:{name:'吐鲁番餐厅',detail:'葡萄、烤包子、手抓饭'}},
-  {d:'Day 12',t:'吐鲁番 → 乌鲁木齐',r:'180km · 2h',dist:'180km',hl:'交河故城 · 国际大巴扎',
-   co:[[42.951,89.189],[43.1,88.8],[43.4,88.2],[43.6,87.8],[43.825,87.616]],mk:[{p:[43.825,87.616],i:iCh,n:'乌鲁木齐',d:'国际大巴扎 ⚡超充(14+桩)'}],
-   stops:[{name:'交河故城',cat:'世界遗产',coord:[42.968,88.915],hours:'9:00-19:00',desc:'世界最大最古老生土建筑城市'},
+   hotels:[{name:'哈密宾馆',detail:'¥300-500/晚'},{name:'哈密迎宾馆',detail:'¥400-600/晚'}],
+   foods:[{name:'哈密夜市',detail:'哈密瓜、烤肉、拌面'},{name:'哈密回王府附近',detail:'维吾尔族美食'}]},
+
+  {d:'Day 15',t:'哈密 → 吐鲁番',r:'410km · 4h',dist:'410km',hl:'火焰山 · 葡萄沟',
+   co:[[42.829,93.515],[42.9,92.5],[42.95,91.5],[42.95,90.5],[42.951,89.189]],
+   mk:[{p:[42.951,89.189],i:iCh,n:'吐鲁番',d:'火焰山 · 葡萄沟 超充'}],
+   stops:[{name:'火焰山',cat:'景区',coord:[42.960,89.055],hours:'8:00-20:00',desc:'红色砂岩，打卡拍照。门票40元。',guide:'小红书搜"火焰山打卡"'},
+          {name:'葡萄沟',cat:'景区',coord:[42.950,89.200],hours:'8:00-20:00',desc:'9月葡萄成熟季，品尝鲜葡萄。门票60元。',guide:'小红书搜"吐鲁番葡萄沟9月"'}],
+   hotels:[{name:'吐鲁番双城宾馆',detail:'¥300-500/晚'},{name:'吐鲁番火洲酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'吐鲁番餐厅',detail:'葡萄、烤包子、手抓饭'},{name:'老城巴扎',detail:'各种干果、馕'}]},
+
+  {d:'Day 16',t:'吐鲁番 → 乌鲁木齐',r:'180km · 2h',dist:'180km',hl:'交河故城 · 国际大巴扎',
+   co:[[42.951,89.189],[43.1,88.8],[43.4,88.2],[43.6,87.8],[43.825,87.616]],
+   mk:[{p:[43.825,87.616],i:iCh,n:'乌鲁木齐',d:'国际大巴扎 ⚡超充(14+桩)'}],
+   stops:[{name:'交河故城',cat:'世界遗产',coord:[42.968,88.915],hours:'9:00-19:00',desc:'世界最大最古老生土建筑城市，门票70元',guide:'小红书搜"交河故城攻略"'},
           {name:'坎儿井民俗园',cat:'博物馆',coord:[42.920,89.150],hours:'9:00-18:00',desc:'古代水利工程奇迹'},
-          {name:'国际大巴扎',cat:'市场',coord:[43.790,87.620],hours:'10:00-20:00',desc:'采购干果、纪念品'}],
-   hotel:{name:'乌鲁木齐环球大酒店',detail:'¥400-700/晚'},food:{name:'领馆巷美食街',detail:'烤包子、抓饭、酸奶粽子'}},
-  {ph:'北疆阿勒泰',pc:'#8b5cf6',d:'Day 14',t:'乌鲁木齐 → 阿勒泰',r:'670km · 7-8h',dist:'670km',hl:'赶路日 · 克拉玛依补电',
-   co:[[43.825,87.616],[44.2,87.5],[45.0,87.2],[46.0,87.5],[47.0,87.8],[47.826,88.135]],mk:[{p:[47.826,88.135],i:iCh,n:'阿勒泰',d:'9月秋色天花板 ⚡超充'}],
+          {name:'国际大巴扎',cat:'市场',coord:[43.790,87.620],hours:'10:00-20:00',desc:'采购干果、纪念品',guide:'小红书搜"乌鲁木齐国际大巴扎购物攻略"'}],
+   hotels:[{name:'乌鲁木齐环球大酒店',detail:'¥400-700/晚'},{name:'乌鲁木齐康莱德酒店',detail:'¥600-1000/晚'},{name:'⛺ 乌鲁木齐周边露营',detail:'南山风景区'}],
+   foods:[{name:'领馆巷美食街',detail:'烤包子、抓饭、酸奶粽子'},{name:'五一星光夜市',detail:'大盘鸡、烤全羊、奶茶'},{name:'血站大盘鸡',detail:'乌鲁木齐名店'}]},
+
+  {d:'Day 17',t:'乌鲁木齐休整',r:'市内',dist:'市内',hl:'新疆博物馆 · 南山',
+   co:[[43.825,87.616],[43.830,87.590],[43.820,87.630]],
+   mk:[{p:[43.825,87.616],i:iCh,n:'乌鲁木齐',d:'休整日'}],
+   stops:[{name:'新疆博物馆',cat:'博物馆',coord:[43.830,87.590],hours:'10:00-18:30',desc:'楼兰美女干尸，丝路文物，免费',guide:'小红书搜"新疆博物馆攻略"'},
+          {name:'红山公园',cat:'公园',coord:[43.820,87.630],hours:'全天',desc:'俯瞰乌鲁木齐全景'}],
+   hotels:[{name:'乌鲁木齐环球大酒店',detail:'¥400-700/晚'}],
+   foods:[{name:'五一星光夜市',detail:'大盘鸡、烤全羊、奶茶'}]},
+
+  {ph:'北疆阿勒泰',pc:'#8b5cf6',d:'Day 18',t:'乌鲁木齐 → 阿勒泰',r:'670km · 7-8h',dist:'670km',hl:'赶路日 · 克拉玛依补电',
+   co:[[43.825,87.616],[44.2,87.5],[45.0,87.2],[46.0,87.5],[47.0,87.8],[47.826,88.135]],
+   mk:[{p:[47.826,88.135],i:iCh,n:'阿勒泰',d:'9月秋色天花板 ⚡超充'}],
    stops:[{name:'阿勒泰市区',cat:'城市',coord:[47.826,88.135],hours:'-',desc:'9月秋色天花板，赶路日670km'}],
-   hotel:{name:'阿勒泰克兰酒店',detail:'¥300-500/晚'},food:{name:'阿勒泰夜市',detail:'冷水鱼、烤肉、奶茶'}},
-  {d:'Day 15',t:'阿勒泰 → 布尔津',r:'100km',dist:'100km',hl:'五彩滩日落 · 河堤夜市',
-   co:[[47.826,88.135],[47.78,87.5],[47.702,86.950]],mk:[{p:[47.702,86.950],i:iCh,n:'布尔津',d:'五彩滩 · 河堤夜市 ⚡第三方'}],
-   stops:[{name:'五彩滩',cat:'景区',coord:[47.750,86.850],hours:'9:00-20:00',desc:'日落时分彩色河岸最美'},
-          {name:'布尔津河堤夜市',cat:'夜市',coord:[47.702,86.950],hours:'18:00-24:00',desc:'烤狗鱼、格瓦斯'}],
-   hotel:{name:'布尔津旅游宾馆',detail:'¥250-450/晚'},food:{name:'河堤夜市',detail:'烤狗鱼、格瓦斯、凉皮'}},
-  {d:'Day 16',t:'布尔津 → 喀纳斯',r:'160km',dist:'160km',hl:'三湾 · 观鱼台 · 9月秋色',
-   co:[[47.702,86.950],[47.9,87.0],[48.05,87.0],[48.220,87.020]],mk:[{p:[48.220,87.020],i:iSt,n:'喀纳斯',d:'三湾 · 观鱼台 · 秋色绝美'}],
-   stops:[{name:'神仙湾',cat:'景点',coord:[48.650,87.050],hours:'8:00-19:00',desc:'晨雾最美'},
+   hotels:[{name:'阿勒泰克兰酒店',detail:'¥300-500/晚'},{name:'阿勒泰迎宾馆',detail:'¥250-450/晚'}],
+   foods:[{name:'阿勒泰夜市',detail:'冷水鱼、烤肉、奶茶'}]},
+
+  {d:'Day 19',t:'阿勒泰 → 布尔津',r:'100km',dist:'100km',hl:'五彩滩日落 · 河堤夜市',
+   co:[[47.826,88.135],[47.78,87.5],[47.702,86.950]],
+   mk:[{p:[47.702,86.950],i:iCh,n:'布尔津',d:'五彩滩 · 河堤夜市 ⚡第三方'}],
+   stops:[{name:'五彩滩',cat:'景区',coord:[47.750,86.850],hours:'9:00-20:00',desc:'日落时分彩色河岸最美。门票45元。',guide:'小红书搜"布尔津五彩滩日落"'},
+          {name:'布尔津河堤夜市',cat:'夜市',coord:[47.702,86.950],hours:'18:00-24:00',desc:'烤狗鱼、格瓦斯',guide:'小红书搜"布尔津河堤夜市"'}],
+   hotels:[{name:'布尔津旅游宾馆',detail:'¥250-450/晚'},{name:'布尔津友谊峰大酒店',detail:'¥300-500/晚'},{name:'⛺ 额尔齐斯河边露营',detail:'免费'}],
+   foods:[{name:'河堤夜市',detail:'烤狗鱼、格瓦斯、凉皮'}]},
+
+  {d:'Day 20',t:'布尔津 → 喀纳斯',r:'160km',dist:'160km',hl:'三湾 · 观鱼台 · 9月秋色',
+   co:[[47.702,86.950],[47.9,87.0],[48.05,87.0],[48.220,87.020]],
+   mk:[{p:[48.220,87.020],i:iSt,n:'喀纳斯',d:'三湾 · 观鱼台 · 秋色绝美'}],
+   stops:[{name:'神仙湾',cat:'景点',coord:[48.650,87.050],hours:'8:00-19:00',desc:'晨雾最美',guide:'小红书搜"喀纳斯神仙湾晨雾"'},
           {name:'月亮湾',cat:'景点',coord:[48.600,87.030],hours:'8:00-19:00',desc:'S形河湾'},
           {name:'卧龙湾',cat:'景点',coord:[48.550,87.020],hours:'8:00-19:00',desc:'湖中小岛如龙'},
-          {name:'观鱼台',cat:'观景台',coord:[48.700,87.000],hours:'8:00-18:00',desc:'俯瞰喀纳斯湖全景，1068级台阶'}],
-   hotel:{name:'喀纳斯新村木屋',detail:'¥400-800/晚，景区内'},food:{name:'景区内餐厅',detail:'较贵，建议自备干粮'}},
-  {d:'Day 17',t:'喀纳斯 → 禾木',r:'60km',dist:'60km',hl:'晨雾 · 白桦林 · 图瓦村落',
-   co:[[48.220,87.020],[48.15,87.08],[48.090,87.150]],mk:[{p:[48.090,87.150],i:iCa,n:'禾木',d:'神的自留地 · 晨雾 · ⛺'}],
-   stops:[{name:'禾木村',cat:'村落',coord:[48.090,87.150],hours:'全天',desc:'神的自留地，图瓦人原始村落'},
+          {name:'观鱼台',cat:'观景台',coord:[48.700,87.000],hours:'8:00-18:00',desc:'俯瞰喀纳斯湖全景，1068级台阶',guide:'小红书搜"喀纳斯观鱼台"'}],
+   hotels:[{name:'喀纳斯新村木屋',detail:'¥400-800/晚，景区内'},{name:'贾登峪酒店',detail:'¥300-600/晚'}],
+   foods:[{name:'景区内餐厅',detail:'较贵，建议自备干粮'}]},
+
+  {d:'Day 21',t:'喀纳斯 → 禾木',r:'60km',dist:'60km',hl:'晨雾 · 白桦林 · 图瓦村落',
+   co:[[48.220,87.020],[48.15,87.08],[48.090,87.150]],
+   mk:[{p:[48.090,87.150],i:iCa,n:'禾木',d:'神的自留地 · 晨雾 · ⛺'}],
+   stops:[{name:'禾木村',cat:'村落',coord:[48.090,87.150],hours:'全天',desc:'神的自留地，图瓦人原始村落',guide:'小红书搜"禾木村秋天攻略"'},
           {name:'禾木观景台',cat:'观景台',coord:[48.100,87.160],hours:'全天',desc:'俯瞰全村炊烟袅袅'},
           {name:'白桦林',cat:'自然景观',coord:[48.080,87.140],hours:'全天',desc:'9月中旬开始变黄'}],
-   hotel:{name:'禾木村木屋民宿',detail:'¥500-1000/晚，建议提前预订'},food:{name:'禾木村餐厅',detail:'奶茶、手抓肉、馕'}},
-  {d:'Day 18',t:'禾木 → 布尔津',r:'250km',dist:'250km',hl:'禾木日出 · 返程',
-   co:[[48.090,87.150],[47.9,87.05],[47.702,86.950]],mk:[],
+   hotels:[{name:'禾木村木屋民宿',detail:'¥500-1000/晚，建议提前预订'},{name:'⛺ 禾木停车场露营',detail:'免费'}],
+   foods:[{name:'禾木村餐厅',detail:'奶茶、手抓肉、馕'}]},
+
+  {d:'Day 22',t:'禾木 → 布尔津',r:'250km',dist:'250km',hl:'禾木日出 · 返程',
+   co:[[48.090,87.150],[47.9,87.05],[47.702,86.950]],
+   mk:[],
    stops:[{name:'禾木晨雾',cat:'自然景观',coord:[48.090,87.150],hours:'日出时分',desc:'清晨炊烟+晨雾，绝美'}],
-   hotel:{name:'布尔津旅游宾馆',detail:'¥250-450/晚'},food:{name:'布尔津夜市',detail:'烤狗鱼、格瓦斯'}},
-  {d:'Day 19',t:'布尔津 → 独山子',r:'450km',dist:'450km',hl:'经克拉玛依 · 休整',
-   co:[[47.702,86.950],[47.0,86.5],[46.5,86.0],[46.130,85.730],[45.5,85.5],[45.0,85.2],[44.326,84.893]],mk:[{p:[44.326,84.893],i:iSc,n:'独山子',d:'独库公路起点 · 大峡谷'}],
-   stops:[{name:'乌尔禾魔鬼城',cat:'景区',coord:[46.130,85.730],hours:'9:00-19:00',desc:'雅丹地貌，日落最美'}],
-   hotel:{name:'独山子宾馆',detail:'¥200-400/晚'},food:{name:'独山子餐厅',detail:'大盘鸡、拌面'}},
-  {ph:'独库公路+伊犁',pc:'#06b6d4',d:'Day 20',t:'独山子 → 巴音布鲁克',r:'260km · 独库北段',dist:'260km',hl:'哈希勒根达坂(3390m) · 乔尔玛',
-   co:[[44.326,84.893],[44.0,84.5],[43.800,84.500],[43.5,84.2],[43.300,84.300],[43.0,84.0],[42.735,84.148]],mk:[{p:[42.735,84.148],i:iSt,n:'巴音布鲁克',d:'九曲十八弯 · 天鹅湖'}],
+   hotels:[{name:'布尔津旅游宾馆',detail:'¥250-450/晚'}],
+   foods:[{name:'布尔津夜市',detail:'烤狗鱼、格瓦斯'}]},
+
+  {d:'Day 23',t:'布尔津 → 乌尔禾 → 独山子',r:'450km',dist:'450km',hl:'乌尔禾魔鬼城',
+   co:[[47.702,86.950],[47.0,86.5],[46.5,86.0],[46.130,85.730],[45.5,85.5],[45.0,85.2],[44.326,84.893]],
+   mk:[{p:[44.326,84.893],i:iSc,n:'独山子',d:'独库公路起点 · 大峡谷'}],
+   stops:[{name:'乌尔禾魔鬼城',cat:'景区',coord:[46.130,85.730],hours:'9:00-19:00',desc:'雅丹地貌，日落最美。门票+区间车约100元。',guide:'小红书搜"乌尔禾魔鬼城日落"'}],
+   hotels:[{name:'独山子宾馆',detail:'¥200-400/晚'},{name:'奎屯酒店',detail:'¥200-400/晚'}],
+   foods:[{name:'独山子餐厅',detail:'大盘鸡、拌面'}]},
+
+  {ph:'独库公路+伊犁',pc:'#06b6d4',d:'Day 24',t:'独山子 → 巴音布鲁克',r:'260km · 独库北段',dist:'260km',hl:'哈希勒根达坂(3390m) · 乔尔玛',
+   co:[[44.326,84.893],[44.0,84.5],[43.800,84.500],[43.5,84.2],[43.300,84.300],[43.0,84.0],[42.735,84.148]],
+   mk:[{p:[42.735,84.148],i:iSt,n:'巴音布鲁克',d:'九曲十八弯 · 天鹅湖'}],
    stops:[{name:'独山子大峡谷',cat:'景区',coord:[44.350,84.900],hours:'9:00-18:00',desc:'出发前可先看'},
           {name:'哈希勒根达坂',cat:'达坂',coord:[43.800,84.500],hours:'全天',desc:'海拔3390m，公路最高点'},
           {name:'乔尔玛烈士陵园',cat:'纪念地',coord:[43.300,84.300],hours:'全天',desc:'纪念修路牺牲的168名战士'}],
-   hotel:{name:'巴音布鲁克镇宾馆',detail:'¥300-600/晚'},food:{name:'巴音布鲁克餐厅',detail:'牦牛肉、奶茶'}},
-  {d:'Day 21',t:'巴音布鲁克 → 库车',r:'260km · 独库南段',dist:'260km',hl:'九曲十八弯 · 天山大峡谷',
-   co:[[42.735,84.148],[42.3,83.8],[42.200,83.800],[41.9,83.3],[42.050,83.100],[41.718,82.937]],mk:[{p:[41.718,82.937],i:iCh,n:'库车',d:'天山大峡谷 · 龟兹文化 ⚡超充'}],
+   hotels:[{name:'巴音布鲁克镇宾馆',detail:'¥300-600/晚'},{name:'⛺ 巴音布鲁克草原露营',detail:'免费，星空绝美'}],
+   foods:[{name:'巴音布鲁克餐厅',detail:'牦牛肉、奶茶'}]},
+
+  {d:'Day 25',t:'巴音布鲁克 → 库车',r:'260km · 独库南段',dist:'260km',hl:'九曲十八弯 · 天山大峡谷',
+   co:[[42.735,84.148],[42.3,83.8],[42.200,83.800],[41.9,83.3],[42.050,83.100],[41.718,82.937]],
+   mk:[{p:[41.718,82.937],i:iCh,n:'库车',d:'天山大峡谷 · 龟兹文化 ⚡超充'}],
    stops:[{name:'九曲十八弯',cat:'景点',coord:[42.700,84.150],hours:'日出时分最美',desc:'天鹅湖，9月天鹅准备南迁'},
           {name:'大小龙池',cat:'湖泊',coord:[42.200,83.800],hours:'全天',desc:'高山湖泊，碧绿清澈'},
-          {name:'天山神秘大峡谷',cat:'景区',coord:[42.050,83.100],hours:'9:00-18:00',desc:'红色砂岩峡谷，震撼'}],
-   hotel:{name:'库车饭店',detail:'¥300-500/晚'},food:{name:'库车大馕城',detail:'库车大、烤肉、鸽子汤'}},
-  {d:'Day 22',t:'库车 → 赛里木湖',r:'480km',dist:'480km',hl:'经阿克苏方向 · 湖边露营',
-   co:[[41.718,82.937],[42.0,82.5],[42.5,82.2],[43.2,81.8],[43.8,81.5],[44.3,81.2],[44.590,81.171]],mk:[{p:[44.590,81.171],i:iSt,n:'赛里木湖',d:'大西洋最后一滴眼泪'}],
-   stops:[{name:'赛里木湖',cat:'湖泊',coord:[44.590,81.171],hours:'全天',desc:'大西洋最后一滴眼泪，环湖90km'}],
-   hotel:{name:'赛里木湖蒙古包/湖边露营',detail:'¥200-500/晚'},food:{name:'湖边简餐',detail:'建议自备干粮，湖边餐厅少'}},
-  {d:'Day 23',t:'赛里木湖 → 伊宁',r:'120km',dist:'120km',hl:'环湖 · 果子沟大桥 · 喀赞其',
-   co:[[44.590,81.171],[44.4,81.1],[44.300,81.250],[44.2,81.15],[44.05,81.2],[43.920,81.310],[43.900,81.350]],mk:[{p:[43.908,81.320],i:iSc,n:'伊宁',d:'喀赞其 · 伊犁河大桥'}],
+          {name:'天山神秘大峡谷',cat:'景区',coord:[42.050,83.100],hours:'9:00-18:00',desc:'红色砂岩峡谷，震撼。门票40元。',guide:'小红书搜"库车天山大峡谷"'}],
+   hotels:[{name:'库车饭店',detail:'¥300-500/晚'},{name:'库车天缘酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'库车大馕城',detail:'库车大、烤肉、鸽子汤'}]},
+
+  {d:'Day 26',t:'库车（龟兹故城）',r:'市内',dist:'市内',hl:'龟兹故城 · 龟兹博物馆',
+   co:[[41.718,82.937],[41.720,82.940],[41.718,82.937]],
+   mk:[{p:[41.718,82.937],i:iMu,n:'库车',d:'龟兹故城 · 龟兹博物馆'}],
+   stops:[{name:'龟兹故城遗址',cat:'遗址',coord:[41.720,82.940],hours:'全天',desc:'古龟兹国都城遗址，免费，人少。丝绸之路重要节点。',guide:'小红书搜"龟兹故城遗址"'},
+          {name:'龟兹博物馆',cat:'博物馆',coord:[41.718,82.937],hours:'10:00-18:00',desc:'展示龟兹文化、佛教艺术、丝路历史。免费。小众但非常值得！',guide:'小红书搜"库车龟兹博物馆"'}],
+   hotels:[{name:'库车饭店',detail:'¥300-500/晚'}],
+   foods:[{name:'库车大馕城',detail:'库车大馕、烤肉'},{name:'库车夜市',detail:'鸽子汤、烤包子'}]},
+
+  {d:'Day 27',t:'库车 → 赛里木湖',r:'480km',dist:'480km',hl:'经阿克苏方向 · 湖边露营',
+   co:[[41.718,82.937],[42.0,82.5],[42.5,82.2],[43.2,81.8],[43.8,81.5],[44.3,81.2],[44.590,81.171]],
+   mk:[{p:[44.590,81.171],i:iSt,n:'赛里木湖',d:'大西洋最后一滴眼泪'}],
+   stops:[{name:'赛里木湖',cat:'湖泊',coord:[44.590,81.171],hours:'全天',desc:'大西洋最后一滴眼泪，环湖90km。门票70元。9月上旬湖水湛蓝草甸微黄。',guide:'小红书搜"赛里木湖环湖攻略9月"'}],
+   hotels:[{name:'赛里木湖蒙古包',detail:'¥200-500/晚'},{name:'⛺ 赛里木湖湖边露营',detail:'免费，绝佳露营点'}],
+   foods:[{name:'湖边简餐',detail:'建议自备干粮'}]},
+
+  {d:'Day 28',t:'赛里木湖 → 伊宁',r:'120km',dist:'120km',hl:'环湖 · 果子沟大桥 · 喀赞其',
+   co:[[44.590,81.171],[44.4,81.1],[44.300,81.250],[44.2,81.15],[44.05,81.2],[43.920,81.310],[43.900,81.350]],
+   mk:[{p:[43.908,81.320],i:iSc,n:'伊宁',d:'喀赞其 · 伊犁河大桥'}],
    stops:[{name:'果子沟大桥',cat:'桥梁',coord:[44.300,81.250],hours:'全天',desc:'中国第一座公路双塔斜拉桥'},
-          {name:'喀赞其民俗旅游区',cat:'村落',coord:[43.920,81.310],hours:'全天',desc:'维吾尔族蓝色小巷'},
+          {name:'喀赞其民俗旅游区',cat:'村落',coord:[43.920,81.310],hours:'全天',desc:'维吾尔族蓝色小巷',guide:'小红书搜"伊宁喀赞其蓝色小巷"'},
           {name:'伊犁河大桥',cat:'桥梁',coord:[43.900,81.350],hours:'全天',desc:'日落绝美'}],
-   hotel:{name:'伊宁隆鑫大酒店',detail:'¥300-500/晚'},food:{name:'伊宁六星街',detail:'冰淇淋、手工酸奶、烤肉'}},
-  {d:'Day 24',t:'伊宁 → 阿克苏',r:'460km · G3012',dist:'460km',hl:'高速赶路 · 阿克苏超充',
-   co:[[43.908,81.320],[43.5,81.0],[42.8,80.8],[42.2,80.6],[41.6,80.4],[41.168,80.260]],mk:[{p:[41.168,80.260],i:iCh,n:'阿克苏',d:'苹果之城 超充'}],
+   hotels:[{name:'伊宁隆鑫大酒店',detail:'¥300-500/晚'},{name:'伊宁中亚国际大酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'伊宁六星街',detail:'冰淇淋、手工酸奶、烤肉'},{name:'汉宾乡夜市',detail:'各种维吾尔族小吃'}]},
+
+  {d:'Day 29',t:'伊宁 → 阿克苏',r:'460km · G3012',dist:'460km',hl:'高速赶路',
+   co:[[43.908,81.320],[43.5,81.0],[42.8,80.8],[42.2,80.6],[41.6,80.4],[41.168,80.260]],
+   mk:[{p:[41.168,80.260],i:iCh,n:'阿克苏',d:'苹果之城 ⚡超充'}],
    stops:[{name:'阿克苏市区',cat:'城市',coord:[41.168,80.260],hours:'-',desc:'苹果之城，赶路日460km'}],
-   hotel:{name:'阿克苏天缘国际酒店',detail:'¥300-500/晚'},food:{name:'阿克苏夜市',detail:'苹果、烤肉、抓饭'}},
-  {ph:'南疆环线',pc:'#f43f5e',d:'Day 25-26',t:'阿克苏 → 喀什',r:'460km',dist:'460km',hl:'古城 · 巴扎 · 艾提尕尔清真寺',
-   co:[[41.168,80.260],[40.8,79.5],[40.3,78.5],[39.9,77.5],[39.6,76.5],[39.470,75.989]],mk:[{p:[39.470,75.989],i:iCh,n:'喀什',d:'古城 · 巴扎 ⚡超充'}],
-   stops:[{name:'喀什古城',cat:'古城',coord:[39.470,75.990],hours:'全天',desc:'迷宫般的土色建筑群，活着的古城'},
+   hotels:[{name:'阿克苏天缘国际酒店',detail:'¥300-500/晚'}],
+   foods:[{name:'阿克苏夜市',detail:'苹果、烤肉、抓饭'}]},
+
+  {ph:'南疆环线',pc:'#f43f5e',d:'Day 30-31',t:'阿克苏 → 喀什',r:'460km',dist:'460km',hl:'古城 · 巴扎 · 艾提尕尔清真寺',
+   co:[[41.168,80.260],[40.8,79.5],[40.3,78.5],[39.9,77.5],[39.6,76.5],[39.470,75.989]],
+   mk:[{p:[39.470,75.989],i:iCh,n:'喀什',d:'古城 · 巴扎 ⚡超充'}],
+   stops:[{name:'喀什古城',cat:'古城',coord:[39.470,75.990],hours:'全天',desc:'迷宫般的土色建筑群，活着的古城',guide:'小红书搜"喀什古城一日游攻略"'},
           {name:'艾提尕尔清真寺',cat:'寺庙',coord:[39.475,75.985],hours:'8:00-20:00',desc:'中国最大清真寺'}],
-   hotel:{name:'喀什古城民宿',detail:'¥300-600/晚，住古城内'},food:{name:'古城夜市',detail:'烤包子、缸子肉、石榴汁'}},
-  {d:'Day 27-28',t:'喀什 → 塔什库尔干',r:'290km',dist:'290km',hl:'慕士塔格峰 · 盘龙古道(4100m)',w:'⚠️ 高反',
-   co:[[39.470,75.989],[39.2,76.0],[38.8,75.8],[38.700,75.600],[38.400,75.400],[38.0,75.3],[37.775,75.232]],mk:[{p:[37.775,75.232],i:iCh,n:'塔什库尔干',d:'帕米尔 · 盘龙古道 充电'}],
-   stops:[{name:'白沙湖',cat:'湖泊',coord:[38.700,75.600],hours:'全天',desc:'白色沙山+碧蓝湖水'},
+   hotels:[{name:'喀什古城民宿',detail:'¥300-600/晚，住古城内'},{name:'喀什深业丽笙酒店',detail:'¥400-700/晚'}],
+   foods:[{name:'古城夜市',detail:'烤包子、缸子肉、石榴汁'},{name:'喀什大巴扎',detail:'各种干果、坚果'}]},
+
+  {d:'Day 32',t:'喀什深度游',r:'市内',dist:'市内',hl:'百年老茶馆 · 巴扎 · 香妃墓',
+   co:[[39.468,75.992],[39.465,75.995],[39.480,76.010]],
+   mk:[],
+   stops:[{name:'百年老茶馆',cat:'茶馆',coord:[39.468,75.992],hours:'10:00-20:00',desc:'体验维吾尔族茶文化',guide:'小红书搜"喀什百年老茶馆"'},
+          {name:'喀什大巴扎',cat:'市场',coord:[39.465,75.995],hours:'10:00-20:00',desc:'中亚最大集市之一，周日最热闹'},
+          {name:'香妃墓',cat:'景点',coord:[39.480,76.010],hours:'9:00-19:00',desc:'阿帕克霍加墓'}],
+   hotels:[{name:'喀什古城民宿',detail:'¥300-600/晚'}],
+   foods:[{name:'古城夜市',detail:'烤包子、缸子肉、石榴汁'}]},
+
+  {d:'Day 33-34',t:'喀什 → 塔什库尔干',r:'290km',dist:'290km',hl:'慕士塔格峰 · 盘龙古道(4100m)',w:'⚠️ 高反',
+   co:[[39.470,75.989],[39.2,76.0],[38.8,75.8],[38.700,75.600],[38.400,75.400],[38.0,75.3],[37.775,75.232]],
+   mk:[{p:[37.775,75.232],i:iCh,n:'塔什库尔干',d:'帕米尔 · 盘龙古道 ⚡充电'}],
+   stops:[{name:'白沙湖',cat:'湖泊',coord:[38.700,75.600],hours:'全天',desc:'白色沙山+碧蓝湖水',guide:'小红书搜"白沙湖打卡"'},
           {name:'卡拉库里湖',cat:'湖泊',coord:[38.400,75.400],hours:'全天',desc:'慕士塔格峰7546m完美倒影'},
-          {name:'塔什库尔干',cat:'城市',coord:[37.775,75.232],hours:'-',desc:'帕米尔高原，海拔3100m'}],
-   hotel:{name:'塔县万达美华酒店',detail:'¥300-500/晚，可充电'},food:{name:'塔县餐厅',detail:'牛肉、奶茶、馕'}},
-  {d:'Day 29-30',t:'塔什库尔干 → 和田',r:'500km',dist:'500km',hl:'经叶城 · 和田夜市',
-   co:[[37.775,75.232],[38.0,75.3],[38.4,75.5],[38.8,75.8],[39.2,76.0],[39.470,75.989],[39.2,76.5],[38.8,77.2],[38.3,78.0],[37.8,78.8],[37.4,79.4],[37.114,79.925]],mk:[{p:[37.114,79.925],i:iCh,n:'和田',d:'夜市 · 玉石 ⚡超充'}],
+          {name:'塔什库尔干',cat:'城市',coord:[37.775,75.232],hours:'-',desc:'帕米尔高原，海拔3100m'},
+          {name:'盘龙古道',cat:'公路',coord:[37.600,75.100],hours:'全天',desc:'600+弯道，海拔4100m+，此生必驾',guide:'小红书搜"盘龙古道自驾攻略"'}],
+   hotels:[{name:'塔县万达美华酒店',detail:'¥300-500/晚，可充电'},{name:'塔县宾馆',detail:'¥200-400/晚'}],
+   foods:[{name:'塔县餐厅',detail:'牛肉、奶茶、馕'}]},
+
+  {d:'Day 35-36',t:'塔什库尔干 → 和田',r:'500km',dist:'500km',hl:'经叶城 · 和田夜市',
+   co:[[37.775,75.232],[38.0,75.3],[38.4,75.5],[38.8,75.8],[39.2,76.0],[39.470,75.989],[39.2,76.5],[38.8,77.2],[38.3,78.0],[37.8,78.8],[37.4,79.4],[37.114,79.925]],
+   mk:[{p:[37.114,79.925],i:iCh,n:'和田',d:'夜市 · 玉石 ⚡超充'}],
    stops:[{name:'约特干故城',cat:'遗址',coord:[37.120,79.920],hours:'18:00-24:00',desc:'夜景华丽'},
-          {name:'和田夜市',cat:'夜市',coord:[37.114,79.925],hours:'18:00-24:00',desc:'全疆最出名的夜市之一'}],
-   hotel:{name:'和田迎宾馆',detail:'¥300-500/晚'},food:{name:'和田夜市',detail:'烤蛋、酸奶粽子、石榴汁'}},
-  {d:'Day 31',t:'和田 → 民丰',r:'310km · G315',dist:'310km',hl:'塔克拉玛干南缘',dd:'⚠️ 充电稀缺',
-   co:[[37.114,79.925],[37.08,80.5],[37.06,81.5],[37.064,82.683]],mk:[{p:[37.064,82.683],i:iRi,n:'民丰',d:'沙漠公路南端 ⚠️充电极稀缺'}],
+          {name:'和田夜市',cat:'夜市',coord:[37.114,79.925],hours:'18:00-24:00',desc:'全疆最出名的夜市之一',guide:'小红书搜"和田夜市攻略"'}],
+   hotels:[{name:'和田迎宾馆',detail:'¥300-500/晚'},{name:'和田天山大酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'和田夜市',detail:'烤蛋、酸奶粽子、石榴汁'}]},
+
+  {d:'Day 37',t:'和田 → 民丰',r:'310km · G315',dist:'310km',hl:'塔克拉玛干南缘',dd:'⚠️ 充电稀缺',
+   co:[[37.114,79.925],[37.08,80.5],[37.06,81.5],[37.064,82.683]],
+   mk:[{p:[37.064,82.683],i:iRi,n:'民丰',d:'沙漠公路南端 ⚠️充电极稀缺'}],
    stops:[{name:'民丰县城',cat:'城市',coord:[37.064,82.683],hours:'-',desc:'沙漠公路南端起点'}],
-   hotel:{name:'民丰宾馆',detail:'¥150-300/晚，条件一般'},food:{name:'民丰餐厅',detail:'简单面食，建议自备干粮'}},
-  {d:'Day 32',t:'民丰 → 且末',r:'320km · G315',dist:'320km',hl:'沙漠南缘 · 玉石之乡',dd:'⚠️',
-   co:[[37.064,82.683],[37.2,83.2],[37.5,84.0],[37.8,85.0],[38.145,85.529]],mk:[{p:[38.145,85.529],i:iRi,n:'且末',d:'玉石之乡 ⚠️需确认充电'}],
+   hotels:[{name:'民丰宾馆',detail:'¥150-300/晚，条件一般'}],
+   foods:[{name:'民丰餐厅',detail:'简单面食，建议自备干粮'}]},
+
+  {d:'Day 38',t:'民丰 → 且末',r:'320km · G315',dist:'320km',hl:'沙漠南缘 · 玉石之乡',dd:'⚠️',
+   co:[[37.064,82.683],[37.2,83.2],[37.5,84.0],[37.8,85.0],[38.145,85.529]],
+   mk:[{p:[38.145,85.529],i:iRi,n:'且末',d:'玉石之乡 ⚠️需确认充电'}],
    stops:[{name:'且末县城',cat:'城市',coord:[38.145,85.529],hours:'-',desc:'玉石之乡'}],
-   hotel:{name:'且末宾馆',detail:'¥150-300/晚'},food:{name:'且末餐厅',detail:'红枣、简单面食'}},
-  {d:'Day 33',t:'且末 → 若羌',r:'330km · G315',dist:'330km',hl:' 楼兰博物馆（重点！）',dd:'⚠️ 充电极稀缺',
-   co:[[38.145,85.529],[38.3,86.0],[38.5,86.5],[38.8,87.5],[39.013,88.174]],mk:[{p:[39.013,88.174],i:iMu,n:'若羌',d:'🏛 楼兰博物馆 · 红枣之乡 ⚠️'}],
-   stops:[{name:'楼兰博物馆',cat:'博物馆',coord:[39.015,88.167],hours:'10:00-18:00',desc:'楼兰美女干尸、丝路文物，预留2-3小时'},
+   hotels:[{name:'且末宾馆',detail:'¥150-300/晚'}],
+   foods:[{name:'且末餐厅',detail:'红枣、简单面食'}]},
+
+  {d:'Day 39',t:'且末 → 若羌',r:'330km · G315',dist:'330km',hl:' 楼兰博物馆（重点！）',dd:'⚠️ 充电极稀缺',
+   co:[[38.145,85.529],[38.3,86.0],[38.5,86.5],[38.8,87.5],[39.013,88.174]],
+   mk:[{p:[39.013,88.174],i:iMu,n:'若羌',d:'🏛 楼兰博物馆 · 红枣之乡 ⚠️'}],
+   stops:[{name:'楼兰博物馆',cat:'博物馆',coord:[39.015,88.167],hours:'10:00-18:00',desc:'楼兰美女干尸、丝路文物，预留2-3小时',guide:'小红书搜"若羌楼兰博物馆"'},
           {name:'若羌红枣',cat:'特产',coord:[39.013,88.174],hours:'-',desc:'9月底-10月正是红枣成熟季'}],
-   hotel:{name:'若羌宾馆',detail:'¥150-300/晚'},food:{name:'若羌餐厅',detail:'红枣、简单面食'}},
-  {ph:'返程·胡杨林+河西走廊',pc:'#22c55e',d:'Day 34-35',t:'若羌 → 库尔勒',r:'430km',dist:'430km',hl:'经且末 · 南疆枢纽',
-   co:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,86.0],[38.145,85.529],[38.5,86.0],[39.2,86.2],[40.0,86.1],[41.0,86.1],[41.764,86.145]],mk:[{p:[41.764,86.145],i:iCh,n:'库尔勒',d:'香梨之城 ⚡超充'}],
+   hotels:[{name:'若羌宾馆',detail:'¥150-300/晚'}],
+   foods:[{name:'若羌餐厅',detail:'红枣、简单面食'}]},
+
+  {ph:'返程·胡杨林+河西走廊',pc:'#22c55e',d:'Day 40-41',t:'若羌 → 库尔勒',r:'430km',dist:'430km',hl:'经且末 · 南疆枢纽',
+   co:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,86.0],[38.145,85.529],[38.5,86.0],[39.2,86.2],[40.0,86.1],[41.0,86.1],[41.764,86.145]],
+   mk:[{p:[41.764,86.145],i:iCh,n:'库尔勒',d:'香梨之城 ⚡超充'}],
    stops:[{name:'库尔勒市区',cat:'城市',coord:[41.764,86.145],hours:'-',desc:'香梨之城，南疆枢纽'}],
-   hotel:{name:'库尔勒康城建国国际酒店',detail:'¥300-500/晚'},food:{name:'库尔勒夜市',detail:'香梨、烤肉、抓饭'}},
-  {d:'Day 36',t:'库尔勒 → 轮台胡杨林',r:'170km',dist:'170km',hl:'🍂 塔里木胡杨林（10月金黄）',
-   co:[[41.764,86.145],[41.9,85.5],[42.0,84.5],[42.05,83.8],[42.108,82.957]],mk:[{p:[42.108,82.957],i:iHu,n:'轮台胡杨林',d:' 塔里木胡杨林公园 · 10月金黄'}],
-   stops:[{name:'塔里木胡杨林公园',cat:'景区',coord:[42.108,82.957],hours:'9:00-18:00',desc:'世界最大胡杨林，10月金黄，小火车¥100'}],
-   hotel:{name:'轮台县城宾馆',detail:'¥200-400/晚'},food:{name:'轮台餐厅',detail:'胡杨林附近餐厅少，建议自备'}},
-  {d:'Day 37',t:'轮台 → 乌鲁木齐',r:'480km · G30',dist:'480km',hl:'高速赶路 · 补给休整',
-   co:[[42.108,82.957],[42.3,83.5],[42.5,84.0],[42.8,84.5],[43.2,85.5],[43.5,86.5],[43.825,87.616]],mk:[],
+   hotels:[{name:'库尔勒康城建国国际酒店',detail:'¥300-500/晚'},{name:'库尔勒梨城花园酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'库尔勒夜市',detail:'香梨、烤肉、抓饭'}]},
+
+  {d:'Day 42',t:'库尔勒 → 轮台胡杨林',r:'170km',dist:'170km',hl:' 塔里木胡杨林（10月金黄）',
+   co:[[41.764,86.145],[41.9,85.5],[42.0,84.5],[42.05,83.8],[42.108,82.957]],
+   mk:[{p:[42.108,82.957],i:iHu,n:'轮台胡杨林',d:'🍂 塔里木胡杨林公园 · 10月金黄'}],
+   stops:[{name:'塔里木胡杨林公园',cat:'景区',coord:[42.108,82.957],hours:'9:00-18:00',desc:'世界最大胡杨林，10月金黄，小火车¥100',guide:'小红书搜"轮台胡杨林10月攻略"'}],
+   hotels:[{name:'轮台县城宾馆',detail:'¥200-400/晚'},{name:'⛺ 胡杨林内露营',detail:'免费，金色胡杨中露营'}],
+   foods:[{name:'轮台餐厅',detail:'胡杨林附近餐厅少，建议自备'}]},
+
+  {d:'Day 43',t:'轮台 → 乌鲁木齐',r:'480km · G30',dist:'480km',hl:'高速赶路 · 补给休整',
+   co:[[42.108,82.957],[42.3,83.5],[42.5,84.0],[42.8,84.5],[43.2,85.5],[43.5,86.5],[43.825,87.616]],
+   mk:[],
    stops:[{name:'乌鲁木齐市区',cat:'城市',coord:[43.825,87.616],hours:'-',desc:'休整、补给、检查车辆'}],
-   hotel:{name:'乌鲁木齐环球大酒店',detail:'¥400-700/晚'},food:{name:'领馆巷美食街',detail:'烤包子、抓饭、酸奶粽子'}},
-  {d:'Day 38',t:'乌鲁木齐 → 哈密',r:'530km',dist:'530km',hl:'G30/G7 · 吐鲁番补电',
-   co:[[43.825,87.616],[43.6,87.8],[43.4,88.2],[43.1,88.8],[42.951,89.189],[42.9,90.5],[42.9,91.5],[42.9,92.5],[42.829,93.515]],mk:[],
+   hotels:[{name:'乌鲁木齐环球大酒店',detail:'¥400-700/晚'}],
+   foods:[{name:'领馆巷美食街',detail:'烤包子、抓饭、酸奶粽子'}]},
+
+  {d:'Day 44',t:'乌鲁木齐 → 哈密',r:'530km',dist:'530km',hl:'G30/G7 · 吐鲁番补电',
+   co:[[43.825,87.616],[43.6,87.8],[43.4,88.2],[43.1,88.8],[42.951,89.189],[42.9,90.5],[42.9,91.5],[42.9,92.5],[42.829,93.515]],
+   mk:[],
    stops:[{name:'哈密市区',cat:'城市',coord:[42.829,93.515],hours:'-',desc:'赶路日530km'}],
-   hotel:{name:'哈密宾馆',detail:'¥300-500/晚'},food:{name:'哈密夜市',detail:'哈密瓜、烤肉'}},
-  {d:'Day 39',t:'哈密 → 敦煌',r:'420km',dist:'420km',hl:'回到敦煌',
-   co:[[42.829,93.515],[42.0,93.6],[41.2,93.8],[40.6,94.2],[40.142,94.662]],mk:[],
+   hotels:[{name:'哈密宾馆',detail:'¥300-500/晚'}],
+   foods:[{name:'哈密夜市',detail:'哈密瓜、烤肉'}]},
+
+  {d:'Day 45',t:'哈密 → 敦煌',r:'420km',dist:'420km',hl:'回到敦煌',
+   co:[[42.829,93.515],[42.0,93.6],[41.2,93.8],[40.6,94.2],[40.142,94.662]],
+   mk:[],
    stops:[{name:'敦煌市区',cat:'城市',coord:[40.142,94.662],hours:'-',desc:'回到敦煌'}],
-   hotel:{name:'敦煌山庄',detail:'¥400-700/晚'},food:{name:'沙洲夜市',detail:'驴肉黄面、杏皮水'}},
-  {d:'Day 40',t:'敦煌 → 嘉峪关',r:'380km',dist:'380km',hl:'天下第一雄关',
-   co:[[40.142,94.662],[40.05,95.5],[40.0,96.5],[39.9,97.5],[39.773,98.289]],mk:[{p:[39.773,98.289],i:iSc,n:'嘉峪关',d:'天下第一雄关'}],
+   hotels:[{name:'敦煌山庄',detail:'¥400-700/晚'}],
+   foods:[{name:'沙洲夜市',detail:'驴肉黄面、杏皮水'}]},
+
+  {d:'Day 46',t:'敦煌 → 嘉峪关',r:'380km',dist:'380km',hl:'天下第一雄关',
+   co:[[40.142,94.662],[40.05,95.5],[40.0,96.5],[39.9,97.5],[39.773,98.289]],
+   mk:[{p:[39.773,98.289],i:iSc,n:'嘉峪关',d:'天下第一雄关'}],
    stops:[{name:'嘉峪关关城',cat:'世界遗产',coord:[39.798,98.223],hours:'8:30-18:00',desc:'天下第一雄关，明长城西端起点'},
           {name:'悬壁长城',cat:'景点',coord:[39.850,98.250],hours:'8:30-18:00',desc:'长城倒挂山脊'}],
-   hotel:{name:'嘉峪关酒店',detail:'¥250-450/晚'},food:{name:'嘉峪关烤肉',detail:'嘉峪关烤肉在甘肃很有名'}},
-  {d:'Day 41',t:'嘉峪关 → 张掖',r:'230km',dist:'230km',hl:'七彩丹霞日落',
-   co:[[39.773,98.289],[39.6,98.6],[39.4,99.2],[39.1,99.8],[38.925,100.449]],mk:[{p:[38.925,100.449],i:iSt,n:'张掖',d:'七彩丹霞 · 世界地质公园'}],
+   hotels:[{name:'嘉峪关酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'嘉峪关烤肉',detail:'嘉峪关烤肉在甘肃很有名'}]},
+
+  {d:'Day 47',t:'嘉峪关 → 张掖',r:'230km',dist:'230km',hl:'七彩丹霞日落',
+   co:[[39.773,98.289],[39.6,98.6],[39.4,99.2],[39.1,99.8],[38.925,100.449]],
+   mk:[{p:[38.925,100.449],i:iSt,n:'张掖',d:'七彩丹霞 · 世界地质公园'}],
    stops:[{name:'张掖七彩丹霞',cat:'世界地质公园',coord:[38.952,100.088],hours:'7:00-18:00',desc:'日落时分最佳，四个观景台'}],
-   hotel:{name:'张掖丹霞口旅游度假小镇',detail:'¥300-600/晚'},food:{name:'张掖市区',detail:'搓鱼面、炮仗面'}},
-  {d:'Day 42',t:'张掖 → 武威 → 兰州',r:'550km',dist:'550km',hl:'雷台汉墓 · 🏠 到家！',
-   co:[[38.925,100.449],[38.7,100.8],[38.5,101.3],[38.2,102.0],[37.928,102.634],[37.3,102.8],[36.8,103.0],[36.3,103.5],[36.058,103.823]],mk:[{p:[36.058,103.823],i:iHm,n:'兰州',d:'🏠 到家！'}],
+   hotels:[{name:'张掖丹霞口旅游度假小镇',detail:'¥300-600/晚'}],
+   foods:[{name:'张掖市区',detail:'搓鱼面、炮仗面'}]},
+
+  {d:'Day 48',t:'张掖 → 武威',r:'230km',dist:'230km',hl:'雷台汉墓',
+   co:[[38.925,100.449],[38.7,100.8],[38.5,101.3],[38.2,102.0],[37.928,102.634]],
+   mk:[{p:[37.928,102.634],i:iSc,n:'武威',d:'雷台汉墓 · 马踏飞燕'}],
    stops:[{name:'雷台汉墓',cat:'遗址',coord:[37.935,102.640],hours:'8:30-17:30',desc:'马踏飞燕出土地'},
-          {name:'武威文庙',cat:'景点',coord:[37.925,102.638],hours:'8:30-17:30',desc:'西北最大孔庙'},
-          {name:'兰州黄河铁桥',cat:'景点',coord:[36.065,103.817],hours:'全天',desc:'行程圆满结束！'}],
-   hotel:{name:'-',detail:'到家！'},food:{name:'正宁路夜市',detail:'牛奶鸡蛋醪糟、烤羊肉串'}},
+          {name:'武威文庙',cat:'景点',coord:[37.925,102.638],hours:'8:30-17:30',desc:'西北最大孔庙'}],
+   hotels:[{name:'武威雷台大酒店',detail:'¥250-450/晚'}],
+   foods:[{name:'武威市区',detail:'三套车（行面、腊肉、茯茶）'}]},
+
+  {d:'Day 49',t:'武威 → 兰州',r:'320km',dist:'320km',hl:'🏠 到家！',
+   co:[[37.928,102.634],[37.3,102.8],[36.8,103.0],[36.3,103.5],[36.058,103.823]],
+   mk:[{p:[36.058,103.823],i:iHm,n:'兰州',d:'🏠 到家！'}],
+   stops:[{name:'兰州黄河铁桥',cat:'景点',coord:[36.065,103.817],hours:'全天',desc:'行程圆满结束！'}],
+   hotels:[{name:'-',detail:'到家！'}],
+   foods:[{name:'正宁路夜市',detail:'牛奶鸡蛋醪糟、烤羊肉串'}]},
 ];
 
 const altRoutes={
@@ -309,23 +487,19 @@ const altRoutes={
     {n:'阿拉尔→沙漠公路零公里→轮台',c:'#14b8a6',w:3,p:[[40.547,81.281],[40.7,81.8],[40.9,82.3],[41.1,82.7],[41.3,83.0],[41.6,83.1],[41.9,83.1],[42.108,82.957]]},
     {n:'轮台→库尔勒',c:'#14b8a6',w:2.5,p:[[42.108,82.957],[42.0,84.0],[41.9,85.0],[41.764,86.145]]},
     {n:'库尔勒→乌鲁木齐',c:'#14b8a6',w:2.5,p:[[41.764,86.145],[42.0,85.5],[42.5,84.5],[43.0,85.0],[43.5,86.5],[43.825,87.616]]},
-  ],mks:[{p:[40.547,81.281],i:iCh,n:'阿拉尔',d:'塔里木河畔新城 ⚡充电 · 沙漠公路零公里'},{p:[41.4,83.1],i:mi('🍂',13),n:'沙雅胡杨林',d:'🍂 塔里木原始胡杨林 · 比轮台更原始壮观'},{p:[41.1,82.7],i:mi('📍',12),n:'沙漠公路零公里',d:'G217起点标志 · 打卡拍照'}]},
+  ],mks:[{p:[40.547,81.281],i:iCh,n:'阿拉尔',d:'塔里木河畔新城 ⚡充电'},{p:[41.4,83.1],i:mi('🍂',13),n:'沙雅胡杨林',d:' 塔里木原始胡杨林'}]},
   desert:{name:'沙漠公路方案',color:'#ef4444',segs:[
     {n:'民丰→轮台（沙漠公路522km）',c:'#ef4444',w:3,p:[[37.064,82.683],[37.3,82.8],[37.6,83.0],[38.0,83.2],[38.4,83.3],[38.8,83.4],[39.2,83.5],[39.6,83.6],[40.0,83.7],[40.5,83.8],[41.0,83.5],[41.5,83.2],[42.108,82.957]],d:'8,6'},
-    {n:'轮台→库尔勒',c:'#ef4444',w:2.5,p:[[42.108,82.957],[42.0,84.0],[41.9,85.0],[41.764,86.145]],d:'8,6'},
-    {n:'库尔勒→乌鲁木齐',c:'#ef4444',w:2.5,p:[[41.764,86.145],[42.0,85.5],[42.5,84.5],[43.0,85.0],[43.5,86.5],[43.825,87.616]],d:'8,6'},
+    {n:'轮台→库尔勒→乌鲁木齐',c:'#ef4444',w:2.5,p:[[42.108,82.957],[42.0,84.0],[41.9,85.0],[41.764,86.145],[42.0,85.5],[42.5,84.5],[43.0,85.0],[43.5,86.5],[43.825,87.616]],d:'8,6'},
   ],mks:[{p:[39.5,83.3],i:iRi,n:'塔克拉玛干沙漠公路',d:'️ 522km无充电！Tesla慎入'}]},
   g315:{name:'G315入南疆',color:'#f59e0b',segs:[
-    {n:'茫崖→若羌',c:'#f59e0b',w:2.5,p:[[38.238,91.210],[38.5,90.5],[38.8,89.5],[38.9,88.8],[39.013,88.174]],d:'6,4'},
-    {n:'若羌→且末',c:'#f59e0b',w:2,p:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,85.8],[38.145,85.529]],d:'6,4'},
-    {n:'且末→民丰',c:'#f59e0b',w:2,p:[[38.145,85.529],[37.8,85.0],[37.5,84.0],[37.2,83.2],[37.064,82.683]],d:'6,4'},
-    {n:'民丰→和田',c:'#f59e0b',w:2,p:[[37.064,82.683],[37.05,81.8],[37.05,81.0],[37.08,80.5],[37.114,79.925]],d:'6,4'},
+    {n:'茫崖→若羌→且末→民丰→和田',c:'#f59e0b',w:2.5,p:[[38.238,91.210],[38.5,90.5],[38.8,89.5],[38.9,88.8],[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,85.8],[38.145,85.529],[37.8,85.0],[37.5,84.0],[37.2,83.2],[37.064,82.683],[37.05,81.8],[37.05,81.0],[37.08,80.5],[37.114,79.925]],d:'6,4'},
   ],mks:[{p:[38.6,89.0],i:iRi,n:'G315无人区',d:'⚠️ 连续1000km充电极稀缺'}]},
 };
 
 const confLines=[],layers={};
-days.forEach((d,i)=>{if(d.co.length<2)return;const c=d.pc||'#666';const l=L.polyline(d.co,{color:c,weight:2.5,opacity:.45}).addTo(map);l.bindTooltip(d.d+' '+d.t,{sticky:true,className:'rt'});confLines.push(l)});
-Object.keys(altRoutes).forEach(k=>{const ar=altRoutes[k];const ls=[];ar.segs.forEach(s=>{const o={color:s.c,weight:s.w,opacity:.5};if(s.d)o.dashArray=s.d;ls.push(L.polyline(s.p,o))});const mks=(ar.mks||[]).map(m=>L.marker(m.p,{icon:m.i}).bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`));layers[k]={lines:ls,markers:mks,visible:k==='alar'}});
+days.forEach((d,i)=>{if(d.co.length<2)return;const c=d.pc||'#666';const l=L.polyline(d.co,{color:c,weight:3,opacity:.7}).addTo(map);l.bindTooltip(d.d+' '+d.t,{sticky:true,className:'rt'});confLines.push(l)});
+Object.keys(altRoutes).forEach(k=>{const ar=altRoutes[k];const ls=[];ar.segs.forEach(s=>{const o={color:s.c,weight:s.w,opacity:.6};if(s.d)o.dashArray=s.d;ls.push(L.polyline(s.p,o))});const mks=(ar.mks||[]).map(m=>L.marker(m.p,{icon:m.i}).bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`));layers[k]={lines:ls,markers:mks,visible:k==='alar'}});
 layers.alar.lines.forEach(l=>l.addTo(map));layers.alar.markers.forEach(m=>m.addTo(map));
 
 const allMks=[];days.forEach(d=>{(d.mk||[]).forEach(m=>{const mk=L.marker(m.p,{icon:m.i}).addTo(map);mk.bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`);L.marker(m.p,{icon:L.divIcon({html:`<span class="cl">${m.n}</span>`,className:'',iconSize:[60,14],iconAnchor:[-6,7]}),interactive:false}).addTo(map);allMks.push(mk)})});
@@ -343,49 +517,25 @@ function selectDay(idx){
   document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));
   const d=days[idx];selIdx=idx;currentStop=0;
   document.querySelectorAll('.di').forEach(c=>{if(parseInt(c.dataset.idx)===idx)c.classList.add('act')});
-  confLines.forEach(l=>l.setStyle({opacity:.12,weight:1.5}));
+  confLines.forEach(l=>l.setStyle({opacity:.1,weight:1.5}));
   if(d.co.length>=2){const hl=L.polyline(d.co,{color:d.pc||'#60a5fa',weight:4,opacity:.9}).addTo(map);hlLines.push(hl)}
-  if(d.stops&&d.stops.length>1){
-    d.stops.forEach((s,i)=>{
-      const icon=L.divIcon({html:`<div style="display:flex;align-items:center;justify-content:center;background:#4A90D9;color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-weight:700;font-size:11px;width:22px;height:22px">${i+1}</div>`,className:'',iconSize:[22,22],iconAnchor:[11,11]});
-      const m=L.marker(s.coord,{icon,zIndexOffset:1000}).addTo(map);
-      m.bindPopup(`<div class="pp"><strong>${s.name}</strong><br>${s.cat}<br>${s.hours}<br>${s.desc}</div>`);
-      hlMks.push(m);
-    });
-  }
-  if(d.co.length>=2)map.fitBounds(d.co,{padding:[80,80],maxZoom:10});
-  else if(d.co.length===1)map.flyTo(d.co[0],10,{duration:1});
-  // Show detail panel
+  if(d.stops&&d.stops.length>1){d.stops.forEach((s,i)=>{const icon=L.divIcon({html:`<div style="display:flex;align-items:center;justify-content:center;background:#4A90D9;color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-weight:700;font-size:11px;width:22px;height:22px">${i+1}</div>`,className:'',iconSize:[22,22],iconAnchor:[11,11]});const m=L.marker(s.coord,{icon,zIndexOffset:1000}).addTo(map);m.bindPopup(`<div class="pp"><strong>${s.name}</strong><br>${s.cat}<br>${s.hours}<br>${s.desc}</div>`);hlMks.push(m)})}
+  if(d.co.length>=2)map.fitBounds(d.co,{padding:[80,80],maxZoom:10});else if(d.co.length===1)map.flyTo(d.co[0],10,{duration:1});
   document.getElementById('dpTitle').textContent=d.d+' · '+d.t;
   const stopsEl=document.getElementById('dpStops');stopsEl.innerHTML='';
-  if(d.stops){d.stops.forEach((s,i)=>{
-    const card=document.createElement('div');card.className='dp-stop'+(i===currentStop?' active':'');
-    card.innerHTML=`<div class="sn">第${i+1}站</div><div class="sname">${s.name}</div><div class="scat">${s.cat}</div><div class="shours">🕐 ${s.hours}</div><div class="sdesc">${s.desc}</div>`;
-    card.onclick=()=>{currentStop=i;updateStopHighlight();map.flyTo(s.coord,13,{duration:.8})};
-    stopsEl.appendChild(card);
-  })}
-  document.getElementById('dpHotel').textContent=d.hotel?d.hotel.name:'-';
-  document.getElementById('dpHotelD').textContent=d.hotel?d.hotel.detail:'-';
-  document.getElementById('dpFood').textContent=d.food?d.food.name:'-';
-  document.getElementById('dpFoodD').textContent=d.food?d.food.detail:'-';
+  if(d.stops){d.stops.forEach((s,i)=>{const card=document.createElement('div');card.className='dp-stop'+(i===currentStop?' active':'');card.innerHTML=`<div class="sn">第${i+1}站</div><div class="sname">${s.name}</div><div class="scat">${s.cat}</div><div class="shours">🕐 ${s.hours}</div><div class="sdesc">${s.desc}</div>${s.guide?`<div class="sguide" onclick="window.open('https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(s.name+'攻略')}','_blank')">📱 小红书攻略</div>`:''}`;card.onclick=()=>{currentStop=i;updateStopHighlight();map.flyTo(s.coord,13,{duration:.8})};stopsEl.appendChild(card)})}
+  const hotelsEl=document.getElementById('dpHotels');hotelsEl.innerHTML='';
+  if(d.hotels){d.hotels.forEach(h=>{const div=document.createElement('div');div.className='dp-info-item';div.innerHTML=`<div class="iname">${h.name}</div><div class="idetail">${h.detail}</div>`;hotelsEl.appendChild(div)})}
+  const foodsEl=document.getElementById('dpFoods');foodsEl.innerHTML='';
+  if(d.foods){d.foods.forEach(f=>{const div=document.createElement('div');div.className='dp-info-item';div.innerHTML=`<div class="iname">${f.name}</div><div class="idetail">${f.detail}</div>`;foodsEl.appendChild(div)})}
   document.getElementById('detailPanel').classList.add('show');
   document.getElementById('resetBtn').style.display='block';
   document.getElementById('ovTxt').textContent=d.d+' · '+d.t;
 }
-function updateStopHighlight(){
-  document.querySelectorAll('.dp-stop').forEach((c,i)=>{c.classList.toggle('active',i===currentStop)});
-}
+function updateStopHighlight(){document.querySelectorAll('.dp-stop').forEach((c,i)=>{c.classList.toggle('active',i===currentStop)})}
 function prevStop(){if(currentStop>0){currentStop--;updateStopHighlight();map.flyTo(days[selIdx].stops[currentStop].coord,13,{duration:.8})}}
 function nextStop(){if(days[selIdx].stops&&currentStop<days[selIdx].stops.length-1){currentStop++;updateStopHighlight();map.flyTo(days[selIdx].stops[currentStop].coord,13,{duration:.8})}}
-function resetView(){
-  selIdx=-1;hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;
-  confLines.forEach(l=>l.setStyle({opacity:.45,weight:2.5}));
-  document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));
-  map.flyTo([39,90],4,{duration:1});
-  document.getElementById('detailPanel').classList.remove('show');
-  document.getElementById('resetBtn').style.display='none';
-  document.getElementById('ovTxt').textContent='全程总览 · 点击日期查看详情';
-}
+function resetView(){selIdx=-1;hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;confLines.forEach(l=>l.setStyle({opacity:.7,weight:3}));document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));map.flyTo([39,90],4,{duration:1});document.getElementById('detailPanel').classList.remove('show');document.getElementById('resetBtn').style.display='none';document.getElementById('ovTxt').textContent='全程总览 · 点击日期查看详情'}
 function togAlt(key,btn){btn.classList.toggle('on');const vis=btn.classList.contains('on');const al=layers[key];if(!al)return;if(vis){al.lines.forEach(l=>l.addTo(map));al.markers.forEach(m=>m.addTo(map))}else{al.lines.forEach(l=>map.removeLayer(l));al.markers.forEach(m=>map.removeLayer(m))}}
 map.fitBounds(days.flatMap(d=>d.co),{padding:[25,25]});
 const sty=document.createElement('style');sty.textContent='.rt{background:rgba(10,10,26,.92)!important;border:1px solid #333!important;color:#fff!important;font-size:10px!important;border-radius:4px!important;padding:2px 7px!important}';document.head.appendChild(sty);

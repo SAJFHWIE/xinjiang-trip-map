@@ -792,7 +792,7 @@ const sty=document.createElement('style');sty.textContent='.rt{background:rgba(1
 
 // 青海入南疆独立线 - 完整日程数据
 const qhSouthDays = (function(){
-  const d = days.slice(0, 12); // Day 1-12: 兰州→...→大柴旦→茫崖
+  const d = days.slice(0, 11); // Day 1-11: 兰州→...→大柴旦→茫崖 (结束于茫崖)
 
   // ===== Day 13-17: G315入疆段 =====
   let dayNum = 13;
@@ -881,8 +881,10 @@ const qhSouthDays = (function(){
      foods:[{name:'库尔勒餐厅',detail:'香梨、烤羊肉串'}]}
   ); dayNum++;
 
-  // ===== Day 23-28: 独库公路+伊犁（从确认路线days[26]-days[31]）=====
-  const dukuDays = [26,27,28,29,30,31];
+  // ===== Day 22-27: 独库公路+伊犁（从确认路线days[24]-days[29]）=====
+  // days[24]=Day25独山子→巴音布鲁克, days[25]=Day26巴音布鲁克→库车
+  // days[26]=Day27库车, days[27]=Day28库车→赛里木湖, days[28]=Day29赛里木湖→伊宁, days[29]=Day30伊宁休整
+  const dukuDays = [24,25,26,27,28,29];
   dukuDays.forEach(i => {
     if(i < days.length){
       const orig = days[i];

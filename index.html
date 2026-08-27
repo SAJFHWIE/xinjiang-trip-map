@@ -850,20 +850,23 @@ const qhSouthDays = (function(){
 
 function renderQhSouth(){
   const el=document.getElementById('qhSouthDays');el.innerHTML='';
+  let curPh='';
   qhSouthDays.forEach((d,i)=>{
-    const div=document.createElement('div');div.className='di';
-    let h=`<div class="dl">${d.d}｜${d.t}</div><div class="dr">${d.dist}</div><div class="dh">${d.hl}</div>`;
-    if(d.warn)h+=`<div class="dd">${d.warn}</div>`;
-    if(d.charge)h+=`<div style="font-size:8.5px;color:#22c55e">${d.charge}</div>`;
-    div.innerHTML=h;
-    div.onclick=()=>{
-      document.querySelectorAll('#qhSouthDays .di.act').forEach(e=>e.classList.remove('act'));
-      div.classList.add('act');
-      const segIdx=i;
-      if(layers.qhSouth&&layers.qhSouth.lines[segIdx]){map.fitBounds(layers.qhSouth.lines[segIdx].getBounds(),{padding:[60,60],maxZoom:9})}
-    };
+    if(d.ph&&d.ph!==curPh){curPh=d.ph;const sec=document.createElement('div');sec.className='sec';sec.innerHTML=`<h2><span class="d" style="background:${d.pc||'#a855f7'}"></span>${curPh}</h2>`;el.appendChild(sec)}
+    const div=document.createElement('div');div.className='di';div.dataset.idx=i;
+    let h=`<div class="dl">${d.d}｜${d.t}</div><div class="dr">${d.dist||d.r}</div>`;
+    if(d.hl)h+=`<div class="dh">${d.hl}</div>`;if(d.w)h+=`<div class="dw">${d.w}</div>`;if(d.dd)h+=`<div class="dd">${d.dd}</div>`;
+    div.innerHTML=h;div.onclick=()=>selectQhSouthDay(i);
     el.appendChild(div);
   });
+}
+let qhSelIdx=-1;
+function selectQhSouthDay(idx){
+  document.querySelectorAll('#qhSouthDays .di.act').forEach(e=>e.classList.remove('act'));
+  const d=qhSouthDays[idx];qhSelIdx=idx;
+  document.querySelectorAll('#qhSouthDays .di').forEach(c=>{if(parseInt(c.dataset.idx)===idx)c.classList.add('act')});
+  if(d.co&&d.co.length>=2)map.fitBounds(d.co,{padding:[80,80],maxZoom:10});
+  else if(d.co&&d.co.length===1)map.flyTo(d.co[0],10,{duration:1});
 }
 renderQhSouth();
 </script>

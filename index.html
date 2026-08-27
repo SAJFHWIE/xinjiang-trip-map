@@ -82,11 +82,6 @@ body{font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Microsoft YaHei
   </div>
   <div class="ov"><span id="ovTxt">全程总览 · 点击日期查看详情</span><button onclick="resetView()" id="resetBtn" style="display:none">↩ 返回总览</button></div>
   <div id="days"></div>
-  <div id="qhSouthPanel" style="display:none">
-    <div class="sec"><h2><span class="d" style="background:#a855f7"></span>青海入南疆独立线</h2></div>
-    <div id="qhSouthDays"></div>
-    <div class="warn" style="margin:6px"><h4>️ 路线说明</h4><p>本路线在确认路线基础上，仅改变入疆和出疆方式：入疆改走G315经若羌/且末/民丰/和田到喀什(替代原敦煌→哈密→乌鲁木齐)；出疆改走喀什→阿克苏→库尔勒→吐鲁番→哈密→敦煌→兰州(替代原库尔勒→乌鲁木齐→哈密→敦煌)。中间北疆/独库/伊犁/南疆段与确认路线完全相同。</p></div>
-  </div>
   <div class="warn"><h4>⚠️ 高原反应提醒</h4><p>Day 5翻越拉脊山(3820m)、Day 13翻越达坂山(3940m)为高海拔路段，初次入高原者请提前服用红景天，携带血氧仪和氧气罐。</p></div>
   <div class="lg">
     <h3>图例</h3>
@@ -571,45 +566,6 @@ const altRoutes={
     {n:'且末→若羌',c:C_LOULAN,w:2.5,p:[[38.145,85.529],[38.3,86.0],[38.5,86.5],[38.8,87.5],[39.013,88.174]],d:'6,4'},
     {n:'若羌→库尔勒',c:C_LOULAN,w:2.5,p:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,86.0],[38.145,85.529],[38.5,86.0],[39.2,86.2],[40.0,86.1],[41.0,86.1],[41.764,86.145]],d:'6,4'},
   ],mks:[{p:[39.013,88.174],i:iMu,n:'若羌',d:'🏛 楼兰博物馆 · 红枣之乡 ⚠️充电极稀缺'},{p:[37.064,82.683],i:iRi,n:'民丰',d:'⚠️ 充电极稀缺'}]},
-  qhSouth:{name:'青海入南疆独立线',color:C_QHSOUTH,segs:[
-    // ===== 入疆段：敦煌→喀什 =====
-    {n:'敦煌\u2192茫崖\u2192若羌(G315入疆)',c:C_QHENTRY,w:3,p:[[40.142,94.662],[39.5,93.5],[39.0,92.5],[38.5,91.8],[38.238,91.210],[38.5,90.5],[38.75,89.5],[38.9,88.8],[39.013,88.174]]},
-    {n:'若羌\u2192且末\u2192民丰\u2192和田',c:C_SOUTHXJ,w:3,p:[[39.013,88.174],[38.8,87.5],[38.5,86.5],[38.3,85.8],[38.145,85.529],[37.8,84.8],[37.5,84.0],[37.2,83.2],[37.064,82.683],[37.05,81.8],[37.05,81.0],[37.08,80.5],[37.114,79.925]]},
-    {n:'和田\u2192喀什(入南疆完成)',c:C_SOUTHXJ,w:3,p:[[37.114,79.925],[37.5,79.0],[38.0,78.5],[38.5,78.0],[39.0,77.8],[39.474,75.993]]},
-    // ===== 南疆段（先游）：喀什→塔什库尔干→阿克苏→库尔勒 =====
-    {n:'喀什\u2192塔什库尔干\u2192盘龙古道',c:C_SOUTHXJ,w:2.5,p:[[39.474,75.993],[39.0,76.5],[38.5,77.0],[38.0,77.5],[37.8,78.0],[37.720,75.989]]},
-    {n:'塔什库尔干\u2192喀什\u2192阿克苏\u2192库尔勒',c:C_SOUTHXJ,w:2.5,p:[[37.720,75.989],[38.0,77.0],[38.5,77.5],[39.0,78.0],[39.474,75.993],[39.8,77.0],[40.0,78.0],[40.2,79.0],[40.5,80.0],[41.168,80.262]]},
-    // ===== 独库公路+伊犁段：库尔勒北上穿越天山到伊犁 =====
-    {n:'库尔勒\u2192巴音布鲁克\u2192独山子(独库公路)',c:C_DUKU,w:2.5,p:[[41.168,80.262],[41.5,81.0],[41.8,82.0],[42.0,82.5],[42.2,83.0],[42.5,83.5],[42.735,84.148],[43.0,84.0],[43.3,84.3],[43.8,84.5],[44.0,84.5],[44.326,84.893]]},
-    {n:'独山子\u2192伊犁(那拉提\u00b7赛里木湖)',c:C_DUKU,w:2.5,p:[[44.326,84.893],[44.0,83.5],[43.8,83.0],[43.6,82.5],[43.5,82.0],[43.4,81.5],[43.5,81.0],[43.6,80.5],[43.7,80.0],[43.8,79.5],[43.950,81.320]]},
-    // ===== 北疆阿勒泰段（最后游）：伊犁→乌鲁木齐→阿勒泰→喀纳斯→禾木→布尔津→乌尔禾→独山子 =====
-    {n:'伊犁\u2192乌鲁木齐',c:C_NORTHXJ,w:2.5,p:[[43.950,81.320],[43.8,82.0],[43.7,83.0],[43.6,84.0],[43.5,85.0],[43.6,86.0],[43.7,87.0],[43.825,87.616]]},
-    {n:'乌鲁木齐\u2192阿勒泰\u2192布尔津\u2192喀纳斯',c:C_NORTHXJ,w:2.5,p:[[43.825,87.616],[44.2,87.5],[45.0,87.2],[46.0,87.5],[47.0,87.8],[47.826,88.135],[47.78,87.5],[47.702,86.950],[47.9,87.0],[48.05,87.0],[48.220,87.020]]},
-    {n:'喀纳斯\u2192禾木\u2192布尔津\u2192乌尔禾\u2192独山子',c:C_NORTHXJ,w:2.5,p:[[48.220,87.020],[48.15,87.08],[48.090,87.150],[47.9,87.05],[47.702,86.950],[47.0,86.5],[46.5,86.0],[46.130,85.730],[45.5,85.5],[45.0,85.2],[44.326,84.893]]},
-    // ===== 出疆段：独山子→吐鲁番→哈密→敦煌→兰州 =====
-    {n:'独山子\u2192吐鲁番\u2192哈密\u2192敦煌\u2192兰州',c:C_RETURN,w:3,p:[[44.326,84.893],[44.0,85.5],[43.8,86.0],[43.5,86.5],[43.2,87.0],[43.0,87.5],[42.95,89.180],[43.0,90.0],[42.9,91.0],[42.833,93.513],[42.5,94.0],[42.0,94.3],[41.5,94.5],[40.5,94.6],[40.142,94.662],[39.5,95.5],[39.0,96.5],[38.5,97.5],[38.0,98.5],[37.5,99.5],[37.0,100.5],[36.5,101.5],[36.2,102.5],[36.058,103.823]]},
-  ],mks:[
-    {p:[39.013,88.174],i:iCh,n:'若羌',d:'G315入疆第一站 \u00b7 楼兰博物馆 充电稀缺'},
-    {p:[38.145,85.529],i:iRi,n:'且末',d:'充电极稀缺 \u00b7 玉石之乡'},
-    {p:[37.114,79.925],i:iCh,n:'和田',d:'超充 \u00b7 玉石巴扎 \u00b7 团城'},
-    {p:[39.474,75.993],i:iCh,n:'喀什',d:'超充+特斯拉中心 \u00b7 老城'},
-    {p:[37.720,75.989],i:iSc,n:'塔什库尔干',d:'帕米尔高原 \u00b7 石头城 \u00b7 金草滩'},
-    {p:[41.168,80.262],i:iRi,n:'阿克苏',d:'第三方充电 \u00b7 冰糖心苹果'},
-    {p:[41.764,86.145],i:iCh,n:'库尔勒',d:'超充 \u00b7 孔雀河 \u00b7 铁门关'},
-    {p:[42.735,84.148],i:iSt,n:'巴音布鲁克',d:'九曲十八弯 \u00b7 天鹅湖'},
-    {p:[44.326,84.893],i:iSc,n:'独山子',d:'独库公路起点 \u00b7 大峡谷'},
-    {p:[43.950,81.320],i:iSt,n:'伊犁',d:'那拉提草原 \u00b7 喀拉峻'},
-    {p:[43.825,87.616],i:iCh,n:'乌鲁木齐',d:'超充 \u00b7 新疆博物馆 \u00b7 补给'},
-    {p:[47.826,88.135],i:iCh,n:'阿勒泰',d:'超充 \u00b7 9月秋色天花板'},
-    {p:[48.220,87.020],i:iSt,n:'喀纳斯',d:'三湾 \u00b7 观鱼台 \u00b7 秋色绝美'},
-    {p:[48.090,87.150],i:iCa,n:'禾木',d:'神的自留地 \u00b7 晨雾'},
-    {p:[47.702,86.950],i:iCh,n:'布尔津',d:'五彩滩 \u00b7 河堤夜市'},
-    {p:[46.130,85.730],i:iRi,n:'乌尔禾',d:'魔鬼城 \u00b7 雅丹地貌'},
-    {p:[42.95,89.180],i:iRi,n:'吐鲁番',d:'第三方 \u00b7 火焰山 \u00b7 葡萄沟'},
-    {p:[42.833,93.513],i:iCh,n:'哈密',d:'超充 \u00b7 哈密瓜 \u00b7 回王府'},
-    {p:[40.142,94.662],i:iHm,n:'敦煌',d:'莫高窟 \u00b7 鸣沙山 \u00b7 出疆'},
-    {p:[36.058,103.823],i:iHm,n:'兰州',d:'行程结束'},
-  ]},
 };
 
 // 绘制确认路线（自动继承阶段颜色，不再显示灰色线段）
@@ -690,32 +646,46 @@ function selectDay(idx){
 function updateStopHighlight(){document.querySelectorAll('.dp-stop').forEach((c,i)=>{c.classList.toggle('active',i===currentStop)})}
 function prevStop(){if(currentStop>0){currentStop--;updateStopHighlight();map.flyTo(days[selIdx].stops[currentStop].coord,13,{duration:.8})}}
 function nextStop(){if(days[selIdx].stops&&currentStop<days[selIdx].stops.length-1){currentStop++;updateStopHighlight();map.flyTo(days[selIdx].stops[currentStop].coord,13,{duration:.8})}}
-function resetView(){selIdx=-1;hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;confLines.forEach(l=>l.setStyle({opacity:.85,weight:4}));confLines.forEach(l=>l.bringToFront());document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));
-  if(layers.qhSouth&&layers.qhSouth.visible){layers.qhSouth.lines.forEach(l=>map.removeLayer(l));layers.qhSouth.markers.forEach(m=>map.removeLayer(m));layers.qhSouth.visible=false;document.querySelectorAll('.cb').forEach(b=>{if(b.textContent.includes('青海入南疆'))b.classList.remove('on')});document.getElementById('days').style.display='';document.getElementById('qhSouthPanel').style.display='none';document.querySelector('.cb.ca').classList.add('on');confLines.forEach(l=>l.addTo(map));confLines.forEach(l=>l.bringToFront())}
-  map.flyTo([39,90],4,{duration:1});document.getElementById('detailPanel').classList.remove('show');document.getElementById('resetBtn').style.display='none';document.getElementById('ovTxt').textContent='全程总览 · 点击日期查看详情';document.getElementById('statDist').textContent='~16.5k';document.getElementById('statDays').textContent='64';document.getElementById('statAlt').textContent='4.7k'}
+function resetView(){selIdx=-1;qhSelIdx2=-1;hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;
+  if(qhSouthVisible){qhSouthLines.forEach(l=>l.setStyle({opacity:.85,weight:4}));qhSouthLines.forEach(l=>l.bringToFront())}
+  else{confLines.forEach(l=>l.setStyle({opacity:.85,weight:4}));confLines.forEach(l=>l.bringToFront())}
+  document.querySelectorAll('.di.act').forEach(e=>e.classList.remove('act'));
+  map.flyTo([39,90],4,{duration:1});document.getElementById('detailPanel').classList.remove('show');document.getElementById('resetBtn').style.display='none';
+  document.getElementById('ovTxt').textContent=qhSouthVisible?'青海入南疆独立线 · 基于确认路线 · 仅入疆/出疆不同':'全程总览 · 点击日期查看详情';
+  document.getElementById('statDist').textContent=qhSouthVisible?'~17k':'~16.5k';document.getElementById('statDays').textContent='~64';document.getElementById('statAlt').textContent='4.7k'}
 function togAlt(key,btn){
   if(key==='qhSouth'){
     const vis=!btn.classList.contains('on');
     if(vis){
       btn.classList.add('on');
       document.querySelector('.cb.ca').classList.remove('on');
+      // 隐藏确认路线
       confLines.forEach(l=>map.removeLayer(l));
-      document.getElementById('days').style.display='none';
-      document.getElementById('qhSouthPanel').style.display='';
+      allMks.forEach(m=>map.removeLayer(m));
+      // 隐藏其他备选
       ['desert','g315','loulan'].forEach(k=>{if(layers[k]&&layers[k].visible){layers[k].lines.forEach(l=>map.removeLayer(l));layers[k].markers.forEach(m=>map.removeLayer(m));layers[k].visible=false;document.querySelectorAll('.cb').forEach(b=>{if(b.textContent.includes(k==='desert'?'沙漠':k==='g315'?'G315':'楼兰'))b.classList.remove('on')})}});
-      const al=layers.qhSouth;al.lines.forEach(l=>l.addTo(map));al.markers.forEach(m=>m.addTo(map));al.visible=true;
+      // 绘制qhSouth路线
+      drawQhSouthRoute();
+      // 重建侧边栏
+      document.getElementById('days').innerHTML='';
+      buildQhSouthSidebar();
+      document.getElementById('days').style.display='';
       document.getElementById('ovTxt').textContent='青海入南疆独立线 · 基于确认路线 · 仅入疆/出疆不同';
       document.getElementById('statDist').textContent='~17k';
       document.getElementById('statDays').textContent='~64';
       document.getElementById('statAlt').textContent='4.7k';
-      map.fitBounds(al.lines.flatMap(l=>l.getLatLngs()),{padding:[25,25]});
+      map.fitBounds(qhSouthLines.flatMap(l=>l.getLatLngs()),{padding:[25,25]});
     }else{
       btn.classList.remove('on');
-      const al=layers.qhSouth;al.lines.forEach(l=>map.removeLayer(l));al.markers.forEach(m=>map.removeLayer(m));al.visible=false;
+      // 移除qhSouth路线
+      removeQhSouthRoute();
+      // 恢复确认路线
       document.querySelector('.cb.ca').classList.add('on');
       confLines.forEach(l=>l.addTo(map));confLines.forEach(l=>l.bringToFront());
-      document.getElementById('days').style.display='';
-      document.getElementById('qhSouthPanel').style.display='none';
+      allMks.forEach(m=>m.addTo(map));
+      // 恢复侧边栏
+      document.getElementById('days').innerHTML='';
+      buildConfirmedSidebar();
       document.getElementById('ovTxt').textContent='全程总览 · 点击日期查看详情';
       document.getElementById('statDist').textContent='~16.5k';
       document.getElementById('statDays').textContent='64';
@@ -725,24 +695,97 @@ function togAlt(key,btn){
   }else if(key==='confirmed'){
     btn.classList.toggle('on');
     const vis=btn.classList.contains('on');
-    if(vis&&layers.qhSouth&&layers.qhSouth.visible){
-      layers.qhSouth.lines.forEach(l=>map.removeLayer(l));layers.qhSouth.markers.forEach(m=>map.removeLayer(m));layers.qhSouth.visible=false;
-      document.querySelectorAll('.cb').forEach(b=>{if(b.textContent.includes('青海入南疆'))b.classList.remove('on')});
-      document.getElementById('days').style.display='';document.getElementById('qhSouthPanel').style.display='none';
-    }
-    if(vis){confLines.forEach(l=>l.addTo(map));confLines.forEach(l=>l.bringToFront())}else{confLines.forEach(l=>map.removeLayer(l))}
+    if(vis){
+      if(qhSouthVisible){removeQhSouthRoute();qhSouthVisible=false;document.querySelectorAll('.cb').forEach(b=>{if(b.textContent.includes('青海入南疆'))b.classList.remove('on')})}
+      confLines.forEach(l=>l.addTo(map));confLines.forEach(l=>l.bringToFront());allMks.forEach(m=>m.addTo(map));
+      if(document.getElementById('days').innerHTML==='')buildConfirmedSidebar();
+      document.getElementById('days').style.display='';
+    }else{confLines.forEach(l=>map.removeLayer(l));allMks.forEach(m=>map.removeLayer(m))}
   }else{
     btn.classList.toggle('on');
     const vis=btn.classList.contains('on');
-    if(vis&&layers.qhSouth&&layers.qhSouth.visible){
-      layers.qhSouth.lines.forEach(l=>map.removeLayer(l));layers.qhSouth.markers.forEach(m=>map.removeLayer(m));layers.qhSouth.visible=false;
-      document.querySelectorAll('.cb').forEach(b=>{if(b.textContent.includes('青海入南疆'))b.classList.remove('on')});
-      document.getElementById('days').style.display='';document.getElementById('qhSouthPanel').style.display='none';
-    }
+    if(vis&&qhSouthVisible){removeQhSouthRoute();qhSouthVisible=false;document.querySelectorAll('.cb').forEach(b=>{if(b.textContent.includes('青海入南疆'))b.classList.remove('on')});document.getElementById('days').style.display='';document.querySelector('.cb.ca').classList.add('on');confLines.forEach(l=>l.addTo(map));confLines.forEach(l=>l.bringToFront());allMks.forEach(m=>m.addTo(map));if(document.getElementById('days').innerHTML==='')buildConfirmedSidebar()}
     const al=layers[key];if(!al)return;
     if(vis){al.lines.forEach(l=>l.addTo(map));al.markers.forEach(m=>m.addTo(map))}else{al.lines.forEach(l=>map.removeLayer(l));al.markers.forEach(m=>map.removeLayer(m))}
     al.visible=vis;
   }
+}
+let qhSouthLines=[],qhSouthMks=[],qhSouthVisible=false,qhSelIdx2=-1,qhCurrentStop=0;
+function drawQhSouthRoute(){
+  qhSouthLines.forEach(l=>map.removeLayer(l));qhSouthLines=[];
+  qhSouthMks.forEach(m=>map.removeLayer(m));qhSouthMks=[];
+  let curC=C_QHENTRY;
+  qhSouthDays.forEach(d=>{
+    if(d.pc)curC=d.pc;
+    if(d.co&&d.co.length>=2){
+      const l=L.polyline(d.co,{color:curC,weight:4,opacity:.85}).addTo(map);
+      l.bindTooltip(d.d+' '+d.t,{sticky:true,className:'rt'});l.bringToFront();
+      qhSouthLines.push(l);
+    }
+    (d.mk||[]).forEach(m=>{
+      const mk=L.marker(m.p,{icon:m.i}).addTo(map);mk.bindPopup(`<div class="pp"><strong>${m.n}</strong><br>${m.d}</div>`);
+      L.marker(m.p,{icon:L.divIcon({html:`<span class="cl">${m.n}</span>`,className:'',iconSize:[60,14],iconAnchor:[-6,7]}),interactive:false}).addTo(map);
+      qhSouthMks.push(mk);
+    });
+  });
+  qhSouthVisible=true;
+}
+function removeQhSouthRoute(){
+  qhSouthLines.forEach(l=>map.removeLayer(l));qhSouthLines=[];
+  qhSouthMks.forEach(m=>map.removeLayer(m));qhSouthMks=[];
+  qhSouthVisible=false;
+}
+function buildConfirmedSidebar(){
+  const el=document.getElementById('days');let curPh='';
+  days.forEach((d,i)=>{
+    if(d.ph&&d.ph!==curPh){curPh=d.ph;const sec=document.createElement('div');sec.className='sec';sec.innerHTML=`<h2><span class="d" style="background:${d.pc}"></span>${curPh}</h2>`;el.appendChild(sec)}
+    const div=document.createElement('div');div.className='di';div.dataset.idx=i;
+    let h=`<div class="dl">${d.d}｜${d.t}</div><div class="dr">${d.dist||d.r}</div>`;
+    if(d.hl)h+=`<div class="dh">${d.hl}</div>`;if(d.w)h+=`<div class="dw">${d.w}</div>`;if(d.dd)h+=`<div class="dd">${d.dd}</div>`;
+    div.innerHTML=h;div.onclick=()=>selectDay(i);el.lastChild.appendChild(div);
+  });
+}
+function buildQhSouthSidebar(){
+  const el=document.getElementById('days');let curPh='';
+  qhSouthDays.forEach((d,i)=>{
+    if(d.ph&&d.ph!==curPh){curPh=d.ph;const sec=document.createElement('div');sec.className='sec';sec.innerHTML=`<h2><span class="d" style="background:${d.pc||'#a855f7'}"></span>${curPh}</h2>`;el.appendChild(sec)}
+    const div=document.createElement('div');div.className='di';div.dataset.idx=i;
+    let h=`<div class="dl">${d.d}｜${d.t}</div><div class="dr">${d.dist||d.r}</div>`;
+    if(d.hl)h+=`<div class="dh">${d.hl}</div>`;if(d.w)h+=`<div class="dw">${d.w}</div>`;if(d.dd)h+=`<div class="dd">${d.dd}</div>`;
+    div.innerHTML=h;div.onclick=()=>selectQhSouthDay(i);el.lastChild.appendChild(div);
+  });
+}
+function selectQhSouthDay(idx){
+  hlLines.forEach(l=>map.removeLayer(l));hlLines.length=0;hlMks.forEach(m=>map.removeLayer(m));hlMks.length=0;
+  document.querySelectorAll('#days .di.act').forEach(e=>e.classList.remove('act'));
+  const d=qhSouthDays[idx];qhSelIdx2=idx;qhCurrentStop=0;
+  document.querySelectorAll('#days .di').forEach(c=>{if(parseInt(c.dataset.idx)===idx)c.classList.add('act')});
+  qhSouthLines.forEach(l=>l.setStyle({opacity:.1,weight:1.5}));
+  let dayColor='#60a5fa';for(let j=0;j<=idx;j++){if(qhSouthDays[j].pc)dayColor=qhSouthDays[j].pc}
+  if(d.co&&d.co.length>=2){const hl=L.polyline(d.co,{color:dayColor,weight:4,opacity:.9}).addTo(map);hl.bringToFront();hlLines.push(hl)}
+  if(d.stops&&d.stops.length>1){d.stops.forEach((s,i)=>{
+    const icon=L.divIcon({html:`<div style="display:flex;align-items:center;justify-content:center;background:#4A90D9;color:#fff;border-radius:50%;border:2px solid #fff;box-shadow:0 2px 6px rgba(0,0,0,.3);font-weight:700;font-size:11px;width:22px;height:22px">${i+1}</div>`,className:'',iconSize:[22,22],iconAnchor:[11,11]});
+    const m=L.marker(s.coord,{icon,zIndexOffset:1000}).addTo(map);
+    m.bindPopup(`<div class="pp"><strong>${s.name}</strong><br>${s.cat}<br>${s.hours}<br>${s.desc}</div>`);
+    hlMks.push(m);
+  })}
+  if(d.co&&d.co.length>=2)map.fitBounds(d.co,{padding:[80,80],maxZoom:10});
+  else if(d.co&&d.co.length===1)map.flyTo(d.co[0],10,{duration:1});
+  document.getElementById('dpTitle').textContent=d.d+' · '+d.t;
+  const stopsEl=document.getElementById('dpStops');stopsEl.innerHTML='';
+  if(d.stops){d.stops.forEach((s,i)=>{
+    const card=document.createElement('div');card.className='dp-stop'+(i===qhCurrentStop?' active':'');
+    card.innerHTML=`<div class="sn">第${i+1}站</div><div class="sname">${s.name}</div><div class="scat">${s.cat}</div><div class="shours">🕐 ${s.hours}</div><div class="sdesc">${s.desc}</div>${s.guide?`<div class="sguide" onclick="window.open('https://www.xiaohongshu.com/search_result?keyword=${encodeURIComponent(s.name+'攻略')}','_blank')"> 小红书攻略</div>`:''}`;
+    card.onclick=()=>{qhCurrentStop=i;document.querySelectorAll('.dp-stop').forEach((c,j)=>{c.classList.toggle('active',j===qhCurrentStop)});map.flyTo(s.coord,13,{duration:.8})};
+    stopsEl.appendChild(card);
+  })}
+  const hotelsEl=document.getElementById('dpHotels');hotelsEl.innerHTML='';
+  if(d.hotels){d.hotels.forEach(h=>{const div=document.createElement('div');div.className='dp-info-item';div.innerHTML=`<div class="iname">${h.name}</div><div class="idetail">${h.detail}</div>`;hotelsEl.appendChild(div)})}
+  const foodsEl=document.getElementById('dpFoods');foodsEl.innerHTML='';
+  if(d.foods){d.foods.forEach(f=>{const div=document.createElement('div');div.className='dp-info-item';div.innerHTML=`<div class="iname">${f.name}</div><div class="idetail">${f.detail}</div>`;foodsEl.appendChild(div)})}
+  document.getElementById('detailPanel').classList.add('show');
+  document.getElementById('resetBtn').style.display='block';
+  document.getElementById('ovTxt').textContent=d.d+' · '+d.t;
 }
 map.fitBounds(days.flatMap(d=>d.co),{padding:[25,25]});
 const sty=document.createElement('style');sty.textContent='.rt{background:rgba(10,10,26,.92)!important;border:1px solid #333!important;color:#fff!important;font-size:10px!important;border-radius:4px!important;padding:2px 7px!important}';document.head.appendChild(sty);
@@ -878,27 +921,6 @@ const qhSouthDays = (function(){
 })();
 
 
-function renderQhSouth(){
-  const el=document.getElementById('qhSouthDays');el.innerHTML='';
-  let curPh='';
-  qhSouthDays.forEach((d,i)=>{
-    if(d.ph&&d.ph!==curPh){curPh=d.ph;const sec=document.createElement('div');sec.className='sec';sec.innerHTML=`<h2><span class="d" style="background:${d.pc||'#a855f7'}"></span>${curPh}</h2>`;el.appendChild(sec)}
-    const div=document.createElement('div');div.className='di';div.dataset.idx=i;
-    let h=`<div class="dl">${d.d}｜${d.t}</div><div class="dr">${d.dist||d.r}</div>`;
-    if(d.hl)h+=`<div class="dh">${d.hl}</div>`;if(d.w)h+=`<div class="dw">${d.w}</div>`;if(d.dd)h+=`<div class="dd">${d.dd}</div>`;
-    div.innerHTML=h;div.onclick=()=>selectQhSouthDay(i);
-    el.appendChild(div);
-  });
-}
-let qhSelIdx=-1;
-function selectQhSouthDay(idx){
-  document.querySelectorAll('#qhSouthDays .di.act').forEach(e=>e.classList.remove('act'));
-  const d=qhSouthDays[idx];qhSelIdx=idx;
-  document.querySelectorAll('#qhSouthDays .di').forEach(c=>{if(parseInt(c.dataset.idx)===idx)c.classList.add('act')});
-  if(d.co&&d.co.length>=2)map.fitBounds(d.co,{padding:[80,80],maxZoom:10});
-  else if(d.co&&d.co.length===1)map.flyTo(d.co[0],10,{duration:1});
-}
-renderQhSouth();
 </script>
 </body>
 </html>

@@ -790,55 +790,70 @@ function selectQhSouthDay(idx){
 map.fitBounds(days.flatMap(d=>d.co),{padding:[25,25]});
 const sty=document.createElement('style');sty.textContent='.rt{background:rgba(10,10,26,.92)!important;border:1px solid #333!important;color:#fff!important;font-size:10px!important;border-radius:4px!important;padding:2px 7px!important}';document.head.appendChild(sty);
 
-// 青海入南疆独立线 - 完整日程数据（基于确认路线，顺序调整为南疆→独库→北疆）
+// 青海入南疆独立线 - 完整日程数据
+// 行程顺序：甘肃+青海(1-13) → G315入疆(14-18) → 南疆先游(19-25) → 独库+伊犁(26-31) → 北疆最后(32-38) → 出疆(39-43)
 const qhSouthDays = (function(){
-  const d = days.slice(0, 14); // Day 1-14: 与确认路线完全相同
+  const d = days.slice(0, 13); // Day 1-13: 兰州→炳灵寺→西宁→青海湖→刚察→门源→祁连→德令哈→大柴旦→茫崖
+  // 注意：Day 14(敦煌休整)被跳过，因为G315入疆不经过敦煌
 
-  // ===== Day 15-19: 新入疆段（敦煌→喀什）=====
+  // ===== Day 14-18: G315入疆段（从茫崖出发）=====
+  let dayNum = 14;
   d.push(
-    {ph:'G315入南疆',pc:C_QHENTRY,d:'Day 15',t:'敦煌 → 茫崖',r:'550km · G215',dist:'550km',hl:'莫高窟后出发 · G215向西',dd:'⚠️ G315无人区起点',
-     co:[[40.142,94.662],[39.5,93.5],[39.0,92.5],[38.5,91.8],[38.238,91.210]],
-     mk:[{p:[38.238,91.210],i:iRi,n:'茫崖',d:'翡翠湖 · 最后补给'}],
-     stops:[{name:'敦煌莫高窟',cat:'世界遗产',coord:[40.042,94.762],hours:'8:00-18:00',desc:'出发前游览或昨日已游'},
-            {name:'G215国道',cat:'公路',coord:[39.5,93.5],hours:'-',desc:'敦煌向西，进入阿尔金山边缘'},
-            {name:'茫崖镇',cat:'小镇',coord:[38.238,91.210],hours:'-',desc:'翡翠湖、最后补给点，必须满电！之后进入G315无人区'}],
-     hotels:[{name:'茫崖镇宾馆',detail:'¥150-300/晚'}],
-     foods:[{name:'茫崖镇餐厅',detail:'简单面食'}]},
-    {d:'Day 16',t:'茫崖 → 若羌',r:'430km · G315',dist:'430km',hl:'G315无人区 · 楼兰博物馆',dd:'⚠️ 充电极稀缺',w:'海拔~3000m',
+    {ph:'G315入南疆',pc:C_QHENTRY,d:'Day '+dayNum,t:'茫崖 → 若羌',r:'430km · G315',dist:'430km',hl:'G315无人区 · 楼兰博物馆',dd:'️ 充电极稀缺，满电出发！',w:'海拔~3000m',
      co:[[38.238,91.210],[38.35,90.5],[38.55,89.8],[38.75,89.0],[38.9,88.5],[39.013,88.174]],
      mk:[{p:[39.013,88.174],i:iCh,n:'若羌',d:'楼兰博物馆 · 红枣之乡 ⚡第三方'}],
-     stops:[{name:'G315国道',cat:'公路',coord:[38.5,90.0],hours:'-',desc:'穿越阿尔金山边缘，戈壁无人区，无信号无充电'},
+     stops:[{name:'茫崖翡翠湖',cat:'景点',coord:[38.238,91.210],hours:'-',desc:'出发前最后补给点，必须满电！'},
+            {name:'G315国道',cat:'公路',coord:[38.5,90.0],hours:'-',desc:'穿越阿尔金山边缘，戈壁无人区，无信号无充电'},
             {name:'若羌县',cat:'县城',coord:[39.013,88.174],hours:'-',desc:'楼兰博物馆(免费)、红枣之乡，第三方充电桩'}],
      hotels:[{name:'若羌县宾馆',detail:'¥150-300/晚'}],
      foods:[{name:'若羌县餐厅',detail:'红枣、烤羊肉'}]},
-    {d:'Day 17',t:'若羌 → 且末',r:'360km',dist:'360km',hl:'塔克拉玛干东南缘',dd:'⚠️ 且末充电极稀缺',
+  ); dayNum++;
+  d.push(
+    {d:'Day '+dayNum,t:'若羌 → 且末',r:'360km',dist:'360km',hl:'塔克拉玛干东南缘',dd:'⚠️ 且末充电极稀缺',
      co:[[39.013,88.174],[38.8,87.5],[38.5,86.8],[38.3,86.2],[38.145,85.529]],
      mk:[{p:[38.145,85.529],i:iRi,n:'且末',d:'玉石之乡 · ⚠️充电极稀缺'}],
      stops:[{name:'G315沿沙漠南缘',cat:'公路',coord:[38.5,87.0],hours:'-',desc:'沿塔克拉玛干沙漠南缘行驶'},
             {name:'且末县',cat:'县城',coord:[38.145,85.529],hours:'-',desc:'玉石之乡，充电极稀缺，尽量找宾馆慢充过夜'}],
      hotels:[{name:'且末县宾馆',detail:'¥150-250/晚，可慢充'}],
      foods:[{name:'且末县餐厅',detail:'烤羊肉'}]},
-    {d:'Day 18',t:'且末 → 民丰',r:'380km',dist:'380km',hl:'沙漠南缘公路 · 胡杨林秋色',dd:'⚠️ 民丰无超充',
+  ); dayNum++;
+  d.push(
+    {d:'Day '+dayNum,t:'且末 → 民丰',r:'380km',dist:'380km',hl:'沙漠南缘公路 · 胡杨林秋色',dd:'️ 民丰无超充',
      co:[[38.145,85.529],[37.8,84.8],[37.5,84.0],[37.2,83.2],[37.064,82.683]],
      mk:[{p:[37.064,82.683],i:iRi,n:'民丰',d:'尼雅遗址 · ⚠️无超充'}],
      stops:[{name:'G315继续西行',cat:'公路',coord:[37.5,84.0],hours:'-',desc:'继续沿沙漠南缘，沿途可见胡杨林秋色'},
             {name:'民丰县',cat:'县城',coord:[37.064,82.683],hours:'-',desc:'尼雅遗址(精绝古城)，无超充，找宾馆充电'}],
      hotels:[{name:'民丰县宾馆',detail:'¥150-250/晚，可慢充'}],
      foods:[{name:'民丰县餐厅',detail:'烤包子、奶茶'}]},
-    {d:'Day 19',t:'民丰 → 和田',r:'300km',dist:'300km',hl:'玉石巴扎 · 团城老街',w:'⚡ 超充',
+  ); dayNum++;
+  d.push(
+    {d:'Day '+dayNum,t:'民丰 → 和田',r:'300km',dist:'300km',hl:'玉石巴扎 · 团城老街',w:'⚡ 超充',
      co:[[37.064,82.683],[37.05,82.0],[37.05,81.2],[37.08,80.5],[37.114,79.925]],
      mk:[{p:[37.114,79.925],i:iCh,n:'和田',d:'超充 · 玉石巴扎 · 团城'}],
      stops:[{name:'G315转G314',cat:'公路',coord:[37.05,81.0],hours:'-',desc:'转入G314，进入和田地区'},
             {name:'和田市',cat:'城市',coord:[37.114,79.925],hours:'-',desc:'超充！玉石巴扎、团城老街、核桃王公园'}],
      hotels:[{name:'和田迎宾馆',detail:'¥300-500/晚'}],
-     foods:[{name:'团城美食街',detail:'烤鸽子、缸子肉、鸽子汤面'}]}
-  );
+     foods:[{name:'团城美食街',detail:'烤鸽子、缸子肉、鸽子汤面'}]},
+  ); dayNum++;
+  d.push(
+    {d:'Day '+dayNum,t:'和田 → 喀什',r:'510km',dist:'510km',hl:'叶城G219零公里 · 喀什老城',w:'⚡ 超充+特斯拉中心',
+     co:[[37.114,79.925],[37.5,79.0],[38.0,78.5],[38.5,78.0],[39.0,77.8],[39.474,75.993]],
+     mk:[{p:[39.474,75.993],i:iCh,n:'喀什',d:'超充+特斯拉中心 · 老城'}],
+     stops:[{name:'和田→叶城',cat:'公路',coord:[37.5,79.0],hours:'-',desc:'途经叶城，G219新藏线零公里起点'},
+            {name:'叶城→喀什',cat:'公路',coord:[38.5,78.0],hours:'-',desc:'沿G3012高速向西'},
+            {name:'喀什市',cat:'城市',coord:[39.474,75.993],hours:'-',desc:'超充+特斯拉中心！喀什老城、艾提尕尔清真寺、百年老茶馆'}],
+     hotels:[{name:'喀什深业丽笙酒店',detail:'¥400-700/晚'}],
+     foods:[{name:'喀什夜市',detail:'烤鸽子、缸子肉、鸽子汤面、馕坑肉'}]}
+  ); dayNum++;
 
-  // ===== Day 20-26: 南疆段先游（从确认路线days[32]-days[39]重新排序）=====
-  // 原确认路线Day33-40是南疆环线，现在提前到Day20-26
-  const southXjDays = [32,33,34,35,36,37,38,39]; // 南疆环线索引
-  let dayNum = 20;
-  southXjDays.forEach(i => {
+  // ===== Day 19-25: 南疆段先游（喀什→塔什库尔干→阿克苏→库尔勒）=====
+  // 确认路线的南疆(days[32]-days[39])是从北往南走的(阿克苏→喀什→塔什库尔干)
+  // 我们需要反过来：从喀什南下到塔什库尔干，再北上到阿克苏、库尔勒
+  // 使用确认路线的南疆days，但重新排序
+  const southXjOrig = [32,33,34,35,36,37,38,39]; // 确认路线南疆索引
+  // 反转顺序：从南往北走
+  const southXjReversed = [...southXjOrig].reverse();
+  southXjReversed.forEach(i => {
     if(i < days.length){
       const orig = days[i];
       const newDay = Object.assign({}, orig);
@@ -847,7 +862,7 @@ const qhSouthDays = (function(){
     }
   });
 
-  // ===== Day 27-32: 独库公路+伊犁（从确认路线days[26]-days[31]）=====
+  // ===== Day 26-31: 独库公路+伊犁（从确认路线days[26]-days[31]）=====
   const dukuDays = [26,27,28,29,30,31];
   dukuDays.forEach(i => {
     if(i < days.length){
@@ -858,8 +873,8 @@ const qhSouthDays = (function(){
     }
   });
 
-  // ===== Day 33-39: 北疆阿勒泰 LAST（从确认路线days[18]-days[25]）=====
-  const northXjDays = [18,19,20,21,22,23,24,25];
+  // ===== Day 32-38: 北疆阿勒泰 LAST（从确认路线days[18]-days[25]，去掉Day18乌鲁木齐休整）=====
+  const northXjDays = [19,20,21,22,23,24,25]; // 跳过days[18](乌鲁木齐休整)
   northXjDays.forEach(i => {
     if(i < days.length){
       const orig = days[i];
@@ -869,7 +884,7 @@ const qhSouthDays = (function(){
     }
   });
 
-  // ===== Day 40-44: 新出疆段（独山子→吐鲁番→哈密→敦煌→兰州）=====
+  // ===== Day 39-43: 出疆段（独山子→吐鲁番→哈密→敦煌→兰州）=====
   d.push(
     {ph:'出疆·河西走廊',pc:C_RETURN,d:'Day '+dayNum,t:'独山子 → 吐鲁番',r:'450km · G30',dist:'450km',hl:'穿越准噶尔盆地 · 火焰山',
      co:[[44.326,84.893],[44.0,85.5],[43.8,86.0],[43.5,86.5],[43.2,87.0],[43.0,87.5],[42.95,89.180]],
@@ -919,6 +934,7 @@ const qhSouthDays = (function(){
 
   return d;
 })();
+
 
 
 </script>
